@@ -1,5 +1,8 @@
 html {
     scroll-behavior: smooth;
+    /* Prevent iOS from inflating small text past surrounding copy */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 html,
@@ -11,10 +14,13 @@ body {
         radial-gradient(ellipse 80% 50% at 100% 0%, rgba(45, 212, 191, 0.1), transparent 45%),
         linear-gradient(180deg, #060a12 0%, #0a1220 38%, #0e1829 100%);
     color: #e8eef8;
+    /* 16px base; comfortable for mobile readers and rem-based scaling */
+    font-size: 100%;
     font-family: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
     font-feature-settings: "ss01" on, "cv11" on;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
 }
 
 ::selection {

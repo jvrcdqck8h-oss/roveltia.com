@@ -15,7 +15,7 @@
     box-sizing: border-box;
     max-width: 1180px;
     margin: 0 auto;
-    padding: 0 max(1rem, env(safe-area-inset-left, 0px)) clamp(2.5rem, 6vw, 4rem) max(1rem, env(safe-area-inset-right, 0px));
+    padding: 0 max(1rem, env(safe-area-inset-left, 0px)) calc(clamp(2.5rem, 6vw, 4rem) + env(safe-area-inset-bottom, 0px)) max(1rem, env(safe-area-inset-right, 0px));
 }
 
 .inline-code {
@@ -25,6 +25,8 @@
     border-radius: 4px;
     background: rgba(255, 255, 255, 0.07);
     color: #e2e8f0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 /* —— Site header —— */
@@ -68,11 +70,17 @@
 .site-nav a {
     padding: 0.5rem 0.85rem;
     border-radius: 999px;
-    font-size: 0.8125rem;
+    font-size: clamp(0.8125rem, 0.75rem + 0.35vw, 0.875rem);
     font-weight: 600;
     letter-spacing: 0.02em;
     color: var(--muted);
     transition: color 0.15s ease, background 0.15s ease;
+    touch-action: manipulation;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    box-sizing: border-box;
 }
 
 .site-nav a:hover {
@@ -127,6 +135,11 @@
     letter-spacing: -0.035em;
 }
 
+.feature-grid h3 {
+    font-size: clamp(1.125rem, 2.5vw + 0.35rem, 1.5rem);
+    color: #fff;
+}
+
 .hero-copy h1 {
     max-width: min(22ch, 100%);
     font-size: clamp(2rem, 5.5vw + 0.5rem, 3.75rem);
@@ -136,7 +149,8 @@
 .feature-tag {
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    font-size: clamp(0.68rem, 1.5vw, 0.76rem);
+    /* Minimum ~12px for legibility on small phones */
+    font-size: clamp(0.75rem, 1.4vw, 0.8125rem);
     font-weight: 700;
 }
 
@@ -154,7 +168,8 @@
 .site-footer p,
 .section-lead {
     color: #b8c5d9;
-    font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
+    /* Middle term uses vw so scaling tracks viewport; min stays ≥15px */
+    font-size: clamp(0.9375rem, 0.25rem + 2.75vw, 1.0625rem);
     line-height: 1.65;
 }
 
@@ -203,7 +218,7 @@
     margin-top: clamp(1.35rem, 3vw, 1.75rem);
     padding-top: clamp(1.1rem, 2.5vw, 1.35rem);
     border-top: none;
-    font-size: 0.8125rem;
+    font-size: clamp(0.8125rem, 0.2rem + 1.8vw, 0.875rem);
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -238,12 +253,14 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 2.875rem;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
     padding: 0.75rem 1.25rem;
     border-radius: 999px;
     border: 1px solid transparent;
     font-weight: 700;
-    font-size: 0.9375rem;
+    font-size: clamp(0.9375rem, 0.85rem + 0.5vw, 1rem);
+    touch-action: manipulation;
 }
 
 .primary-link {
@@ -343,7 +360,8 @@
     text-align: left;
     cursor: pointer;
     font-family: inherit;
-    font-size: 0.9375rem;
+    font-size: clamp(0.9375rem, 0.875rem + 0.4vw, 1rem);
+    touch-action: manipulation;
 }
 
 .tier-tab small {
@@ -380,7 +398,7 @@
 .tier-eyebrow-name {
     display: block;
     margin-bottom: 0.5rem;
-    font-size: clamp(0.72rem, 1.4vw, 0.8rem);
+    font-size: clamp(0.75rem, 1.4vw, 0.8125rem);
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: none;
@@ -547,7 +565,12 @@
 
     .comparison-table {
         min-width: 480px;
-        font-size: 0.875rem;
+        font-size: 0.9375rem;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+        padding: 0.75rem 0.65rem;
     }
 }
 
