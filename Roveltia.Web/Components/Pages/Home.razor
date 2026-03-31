@@ -1,10 +1,31 @@
 @page "/"
 @rendermode InteractiveServer
 
-<PageTitle>Roveltia</PageTitle>
+<PageTitle>@SeoContent.HomeTitle</PageTitle>
+
+<HeadContent>
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="description" content="@SeoContent.HomeDescription" />
+    <link rel="canonical" href="@SeoContent.HomeCanonical" />
+    <link rel="alternate" hreflang="en" href="@SeoContent.HomeCanonical" />
+    <link rel="alternate" hreflang="x-default" href="@SeoContent.HomeCanonical" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="@SeoContent.SiteName" />
+    <meta property="og:title" content="@SeoContent.HomeTitle" />
+    <meta property="og:description" content="@SeoContent.HomeDescription" />
+    <meta property="og:url" content="@SeoContent.HomeCanonical" />
+    <meta property="og:image" content="@SeoContent.OgImageUrl" />
+    <meta property="og:image:width" content="@SeoContent.OgImageWidth" />
+    <meta property="og:image:height" content="@SeoContent.OgImageHeight" />
+    <meta property="og:locale" content="@SeoContent.Locale" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="@SeoContent.HomeTitle" />
+    <meta name="twitter:description" content="@SeoContent.HomeDescription" />
+    <meta name="twitter:image" content="@SeoContent.OgImageUrl" />
+    <script type="application/ld+json">@((MarkupString)HomeJsonLd)</script>
+</HeadContent>
 
 <div class="landing-page">
-<a class="skip-link" href="#main-content">Skip to main content</a>
 <header class="site-header">
     <div class="site-header-inner">
         <a class="site-logo" href="/">Roveltia</a>
@@ -157,6 +178,22 @@
 </div>
 
 @code {
+    private static readonly string HomeJsonLd = JsonSerializer.Serialize(
+        new Dictionary<string, object?>
+        {
+            ["@context"] = "https://schema.org",
+            ["@type"] = "WebSite",
+            ["name"] = SeoContent.SiteName,
+            ["url"] = SeoContent.HomeCanonical,
+            ["description"] = SeoContent.HomeDescription,
+            ["publisher"] = new Dictionary<string, object?>
+            {
+                ["@type"] = "Organization",
+                ["name"] = SeoContent.SiteName,
+                ["url"] = SeoContent.SiteUrl
+            }
+        });
+
     private readonly List<TierModel> Tiers =
     [
         new()
