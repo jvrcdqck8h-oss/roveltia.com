@@ -38,7 +38,7 @@
 </header>
 
 <main id="main-content" class="landing-shell" tabindex="-1">
-    <section class="hero-section">
+    <section class="hero-section" aria-labelledby="hero-heading">
         <div class="hero-copy">
             <p class="hero-digital">
                 <span class="hero-digital-strong">Digital download only</span>
@@ -48,7 +48,7 @@
                 <span>No physical unit shipped</span>
             </p>
             <p class="eyebrow">ESP32-C6 · On-device web control</p>
-            <h1>A 3D-printable smart turntable for product photos, 360s, and video.</h1>
+            <h1 id="hero-heading">A 3D-printable smart turntable for product photos, 360s, and video.</h1>
             <p class="hero-text">
                 Roveltia is a digital build kit with STLs and firmware. Source the electronics, print the parts, and control the turntable from your phone. No cloud, no subscription.
             </p>
@@ -186,6 +186,7 @@
             ["name"] = SeoContent.SiteName,
             ["url"] = SeoContent.HomeCanonical,
             ["description"] = SeoContent.HomeDescription,
+            ["image"] = SeoContent.OgImageUrl,
             ["publisher"] = new Dictionary<string, object?>
             {
                 ["@type"] = "Organization",
@@ -254,10 +255,10 @@
     [
         new("IR remote", "✓", "✓", "✓"),
         new("Web UI, WiFi AP, live status (WebSocket)", "✓", "✓", "✓"),
-        new("Flash mode (LDR strobe detect, step per flash)", "No", "✓", "✓"),
-        new("Preflash ignore (timing window)", "No", "✓", "✓"),
-        new("Tunable flash & shutter timing (settle, debounce, delays)", "No", "✓", "✓"),
-        new("Full source code", "No", "No", "✓")
+        new("Flash mode (LDR strobe detect, step per flash)", "–", "✓", "✓"),
+        new("Preflash ignore (timing window)", "–", "✓", "✓"),
+        new("Tunable flash & shutter timing (settle, debounce, delays)", "–", "✓", "✓"),
+        new("Full source code", "–", "–", "✓")
     ];
 
     private TierModel SelectedTier => Tiers.First(tier => tier.Id == selectedTierId);
