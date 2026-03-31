@@ -1,0 +1,25 @@
+# Side-by-side with other sites on the same host:
+# - Compose project name isolates networks/resources from other compose projects.
+# - Default host port is 8081 so another container can keep 8080 (or anything else).
+# - Deploy directory should be unique (e.g. /opt/roveltia vs /opt/printbusters).
+#
+# Reverse proxy: point your vhost at http://127.0.0.1:${ROVELTIA_HOST_PORT:-8081}
+# Add ROVELTIA_HOST_PORT=... to .env on the server if 8081 is taken.
+
+name: roveltia
+
+services:
+  roveltia:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: roveltia-web:latest
+    container_name: roveltia-web
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_ENVIRONMENT: Production
+    ports:
+      - "127.0.0.1:${ROVELTIA_HOST_PORT:-8081}:8080"

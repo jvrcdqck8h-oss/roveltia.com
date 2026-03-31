@@ -1,0 +1,8 @@
+**/.DS_Store
+**/bin/
+**/obj/
+**/.vs/
+**/.idea/
+**/*.user
+**/*.suo
+**/node_modules/

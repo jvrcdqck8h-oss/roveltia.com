@@ -1,0 +1,246 @@
+@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>Roveltia</PageTitle>
+
+<div class="landing-page">
+<header class="site-header">
+    <div class="site-header-inner">
+        <a class="site-logo" href="/">Roveltia</a>
+        <nav class="site-nav" aria-label="On this page">
+            <a href="#product">Overview</a>
+            <a href="#tiers">Tiers</a>
+            <a href="#compare">Compare</a>
+        </nav>
+    </div>
+</header>
+
+<main class="landing-shell">
+    <section class="hero-section">
+        <div class="hero-copy">
+            <p class="hero-digital">
+                <span class="hero-digital-strong">Digital download only</span>
+                <span class="hero-digital-dot" aria-hidden="true">·</span>
+                <span>Print and assemble yourself</span>
+                <span class="hero-digital-dot" aria-hidden="true">·</span>
+                <span>No physical unit shipped</span>
+            </p>
+            <p class="eyebrow">ESP32-C6 · On-device web control</p>
+            <h1>A 3D-printable smart turntable for product photos, 360s, and video.</h1>
+            <p class="hero-text">
+                Roveltia is a digital build kit with STLs and firmware. Source the electronics, print the parts, and control the turntable from your phone. No cloud, no subscription.
+            </p>
+
+            <div class="hero-actions">
+                <a class="primary-link" href="#tiers">Choose a version</a>
+                <a class="secondary-link" href="#product">How it works</a>
+            </div>
+
+            <p class="hero-strip" aria-hidden="false">
+                <span>Offline-first control</span>
+                <span class="hero-strip-dot">·</span>
+                <span>3D-printable build</span>
+                <span class="hero-strip-dot">·</span>
+                <span>Photo and 360 workflows</span>
+            </p>
+        </div>
+    </section>
+
+    <section class="feature-section" id="product">
+        <div class="section-heading">
+            <p class="eyebrow">Overview</p>
+            <h2>How it comes together</h2>
+        </div>
+
+        <div class="feature-grid feature-grid--three">
+            <article>
+                <span class="feature-tag">Hardware</span>
+                <h3>Digital build kit</h3>
+                <p>You get STLs and firmware to download—nothing arrives as an assembled unit. Print the parts and buy components from a BOM.</p>
+            </article>
+            <article>
+                <span class="feature-tag">Control</span>
+                <h3>Control from your phone</h3>
+                <p>The ESP32 hosts a WiFi access point (SSID Roveltia), serves the control UI, and streams live status over WebSocket. You can also use <code class="inline-code">http://roveltia.local</code> when your device resolves mDNS. Fully offline in the room.</p>
+            </article>
+            <article>
+                <span class="feature-tag">Remote</span>
+                <h3>IR remote</h3>
+                <p>IR remote is supported on every tier—add a compatible handset if you like. Start and stop motion, nudge direction and speed, run step presets and multi-frame sequences, toggle flash mode and shutter, and return to home—without reaching for the browser.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="tiers-section" id="tiers">
+        <div class="section-heading">
+            <p class="eyebrow">Tiers</p>
+            <h2>Choose your Roveltia version</h2>
+            <p class="section-lead">All versions include the same hardware files and the same IR remote support. Choose the firmware level that fits your workflow.</p>
+        </div>
+
+        <div class="tier-picker" role="tablist" aria-label="Roveltia versions">
+            @foreach (var tier in Tiers)
+            {
+                <button type="button"
+                        class="@(SelectedTier.Id == tier.Id ? "tier-tab active" : "tier-tab")"
+                        role="tab"
+                        aria-selected="@(SelectedTier.Id == tier.Id)"
+                        @onclick="() => SelectTier(tier.Id)">
+                    <span>@tier.Name</span>
+                    @if (!string.IsNullOrEmpty(tier.TabHint))
+                    {
+                        <small>@tier.TabHint</small>
+                    }
+                </button>
+            }
+        </div>
+
+        <div class="tier-spotlight">
+            <div class="tier-headline">
+                <p class="tier-eyebrow-name">@SelectedTier.Name</p>
+                <h3>@SelectedTier.Tagline</h3>
+                <p class="tier-lede">@SelectedTier.Description</p>
+            </div>
+
+            <div class="tier-columns tier-columns--single">
+                <article>
+                    <h4>Includes</h4>
+                    <ul>
+                        @foreach (var item in SelectedTier.Includes)
+                        {
+                            <li>@item</li>
+                        }
+                    </ul>
+                    <p class="tier-ideal"><strong>Best for:</strong> @SelectedTier.IdealFor</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="comparison-section" id="compare">
+        <div class="section-heading">
+            <p class="eyebrow">Compare</p>
+            <h2>Decide at a glance</h2>
+        </div>
+
+        <p class="table-scroll-hint" aria-hidden="true">Swipe or scroll on small screens</p>
+        <div class="comparison-table-wrap" role="region" aria-label="Tier comparison" tabindex="0">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Roveltia</th>
+                        <th>Creator</th>
+                        <th>Developer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var feature in ComparisonRows)
+                    {
+                        <tr>
+                            <td>@feature.Name</td>
+                            <td>@feature.Base</td>
+                            <td>@feature.Creator</td>
+                            <td>@feature.Developer</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <p>Roveltia · ESP32-C6 · Digital build kit · You print and assemble · No device shipped</p>
+    </footer>
+</main>
+</div>
+
+@code {
+    private readonly List<TierModel> Tiers =
+    [
+        new()
+        {
+            Id = "roveltia",
+            Name = "Roveltia",
+            TabHint = "Standard",
+            Tagline = "The standard Roveltia experience",
+            Description = "Web UI on the Roveltia access point, continuous rotation (0.2–3.0 RPM), step moves, multi-frame auto sequence, shutter, return to home, set zero, IR remote (same as every tier), and core settings—without Creator’s flash workflow tools.",
+            IdealFor = "Everyday product photography, 360s, and video with browser or remote control.",
+            Includes =
+            [
+                "STL pack",
+                "Roveltia firmware (.bin)",
+                "Web UI + live status (WebSocket)",
+                "WiFi AP control (join network Roveltia)",
+                "Continuous rotation, step moves, auto sequence (full revolution, frame counts)",
+                "Shutter trigger, return to home, set zero",
+                "IR remote (all tiers; handset optional)",
+                "Core settings (RPM, step angle, direction, and more)"
+            ]
+        },
+        new()
+        {
+            Id = "creator",
+            Name = "Roveltia Creator",
+            TabHint = "Photo workflow",
+            Tagline = "Built for photography workflows",
+            Description = "Creator adds flash mode: the onboard light sensor arms the workflow, detects strobes, and steps the plate per flash—with optional preflash filtering, shoot-after-settle, and per-frame shutter delay when timing must be exact.",
+            IdealFor = "Studios and creators who sync strobes, filter preflash, and tune detection and delays.",
+            Includes =
+            [
+                "Everything in Roveltia",
+                "Flash mode (LDR strobe detect, step per flash)",
+                "Preflash ignore with timing window",
+                "Tunable detection & timing (threshold, delta, settle, debounce, shutter delay, shoot after settle)",
+                "Creator firmware (.bin) and photography-oriented documentation"
+            ]
+        },
+        new()
+        {
+            Id = "developer",
+            Name = "Roveltia Developer",
+            TabHint = "Full source",
+            Tagline = "Made for customization",
+            Description = "Full Arduino/ESP32 source and an editable web UI—fork firmware, change pins or behavior, or ship your own interface. Same Creator capabilities in source form.",
+            IdealFor = "Custom builds, branded UIs, hardware mods, and teams that compile their own binaries.",
+            Includes =
+            [
+                "Everything in Roveltia Creator",
+                "Full firmware source (Arduino IDE / esp32 board package)",
+                "Editable web UI (web_page.h and project sources)"
+            ]
+        }
+    ];
+
+    private readonly List<ComparisonRow> ComparisonRows =
+    [
+        new("IR remote", "✓", "✓", "✓"),
+        new("Web UI, WiFi AP, live status (WebSocket)", "✓", "✓", "✓"),
+        new("Flash mode (LDR strobe detect, step per flash)", "—", "✓", "✓"),
+        new("Preflash ignore (timing window)", "—", "✓", "✓"),
+        new("Tunable flash & shutter timing (settle, debounce, delays)", "—", "✓", "✓"),
+        new("Full source code", "—", "—", "✓")
+    ];
+
+    private TierModel SelectedTier => Tiers.First(tier => tier.Id == selectedTierId);
+
+    private string selectedTierId = "roveltia";
+
+    private void SelectTier(string id)
+    {
+        selectedTierId = id;
+    }
+
+    private sealed class TierModel
+    {
+        public required string Id { get; init; }
+        public required string Name { get; init; }
+        public string? TabHint { get; init; }
+        public required string Tagline { get; init; }
+        public required string Description { get; init; }
+        public required string IdealFor { get; init; }
+        public required List<string> Includes { get; init; }
+    }
+
+    private sealed record ComparisonRow(string Name, string Base, string Creator, string Developer);
+}
