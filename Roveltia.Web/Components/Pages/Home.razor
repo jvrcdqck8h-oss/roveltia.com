@@ -4,6 +4,7 @@
 <PageTitle>Roveltia</PageTitle>
 
 <div class="landing-page">
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <header class="site-header">
     <div class="site-header-inner">
         <a class="site-logo" href="/">Roveltia</a>
@@ -15,7 +16,7 @@
     </div>
 </header>
 
-<main class="landing-shell">
+<main id="main-content" class="landing-shell" tabindex="-1">
     <section class="hero-section">
         <div class="hero-copy">
             <p class="hero-digital">
@@ -36,7 +37,7 @@
                 <a class="secondary-link" href="#product">How it works</a>
             </div>
 
-            <p class="hero-strip" aria-hidden="false">
+            <p class="hero-strip">
                 <span>Offline-first control</span>
                 <span class="hero-strip-dot">·</span>
                 <span>3D-printable build</span>
@@ -78,13 +79,12 @@
             <p class="section-lead">All versions include the same hardware files and the same IR remote support. Choose the firmware level that fits your workflow.</p>
         </div>
 
-        <div class="tier-picker" role="tablist" aria-label="Roveltia versions">
+        <div class="tier-picker" role="group" aria-label="Roveltia versions">
             @foreach (var tier in Tiers)
             {
                 <button type="button"
                         class="@(SelectedTier.Id == tier.Id ? "tier-tab active" : "tier-tab")"
-                        role="tab"
-                        aria-selected="@(SelectedTier.Id == tier.Id)"
+                        aria-pressed="@(SelectedTier.Id == tier.Id)"
                         @onclick="() => SelectTier(tier.Id)">
                     <span>@tier.Name</span>
                     @if (!string.IsNullOrEmpty(tier.TabHint))
@@ -95,7 +95,7 @@
             }
         </div>
 
-        <div class="tier-spotlight">
+        <div class="tier-spotlight" id="tier-spotlight">
             <div class="tier-headline">
                 <p class="tier-eyebrow-name">@SelectedTier.Name</p>
                 <h3>@SelectedTier.Tagline</h3>
@@ -126,19 +126,20 @@
         <p class="table-scroll-hint" aria-hidden="true">Swipe or scroll on small screens</p>
         <div class="comparison-table-wrap" role="region" aria-label="Tier comparison" tabindex="0">
             <table class="comparison-table">
+                <caption class="sr-only">Compare features across Roveltia, Creator, and Developer</caption>
                 <thead>
                     <tr>
-                        <th></th>
-                        <th>Roveltia</th>
-                        <th>Creator</th>
-                        <th>Developer</th>
+                        <th scope="col"><span class="sr-only">Feature</span></th>
+                        <th scope="col">Roveltia</th>
+                        <th scope="col">Creator</th>
+                        <th scope="col">Developer</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var feature in ComparisonRows)
                     {
                         <tr>
-                            <td>@feature.Name</td>
+                            <th scope="row">@feature.Name</th>
                             <td>@feature.Base</td>
                             <td>@feature.Creator</td>
                             <td>@feature.Developer</td>

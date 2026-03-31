@@ -1,5 +1,7 @@
 html {
     scroll-behavior: smooth;
+    /* Match user default text size (often 16px); rem units scale from here */
+    font-size: 100%;
     /* Prevent iOS from inflating small text past surrounding copy */
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
@@ -14,8 +16,6 @@ body {
         radial-gradient(ellipse 80% 50% at 100% 0%, rgba(45, 212, 191, 0.1), transparent 45%),
         linear-gradient(180deg, #060a12 0%, #0a1220 38%, #0e1829 100%);
     color: #e8eef8;
-    /* 16px base; comfortable for mobile readers and rem-based scaling */
-    font-size: 100%;
     font-family: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
     font-feature-settings: "ss01" on, "cv11" on;
     -webkit-font-smoothing: antialiased;
@@ -37,6 +37,42 @@ a:focus-visible,
 button:focus-visible {
     outline: 2px solid rgba(251, 191, 36, 0.85);
     outline-offset: 3px;
+}
+
+/* Skip link: first focusable element for keyboard / screen reader users */
+.skip-link {
+    position: absolute;
+    left: 0.75rem;
+    top: 0.75rem;
+    z-index: 100;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    color: #0a0f18;
+    background: #fbbf24;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    transform: translateY(-120%);
+    transition: transform 0.15s ease;
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 *,

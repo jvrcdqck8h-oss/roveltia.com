@@ -70,7 +70,7 @@
 .site-nav a {
     padding: 0.5rem 0.85rem;
     border-radius: 999px;
-    font-size: clamp(0.8125rem, 0.75rem + 0.35vw, 0.875rem);
+    font-size: clamp(0.875rem, 0.75rem + 0.35vw, 1rem);
     font-weight: 600;
     letter-spacing: 0.02em;
     color: var(--muted);
@@ -168,8 +168,8 @@
 .site-footer p,
 .section-lead {
     color: #b8c5d9;
-    /* Middle term uses vw so scaling tracks viewport; min stays ≥15px */
-    font-size: clamp(0.9375rem, 0.25rem + 2.75vw, 1.0625rem);
+    /* 1rem minimum: respects user root font size (WCAG text scaling) */
+    font-size: clamp(1rem, 0.25rem + 2.75vw, 1.0625rem);
     line-height: 1.65;
 }
 
@@ -183,7 +183,7 @@
     border-radius: 0;
     border: none;
     background: transparent;
-    font-size: clamp(0.8125rem, 1.1vw, 0.9375rem);
+    font-size: clamp(1rem, 0.5rem + 1.5vw, 1.0625rem);
     line-height: 1.5;
     color: #e2e8f0;
     max-width: 42rem;
@@ -259,7 +259,7 @@
     border-radius: 999px;
     border: 1px solid transparent;
     font-weight: 700;
-    font-size: clamp(0.9375rem, 0.85rem + 0.5vw, 1rem);
+    font-size: clamp(1rem, 0.85rem + 0.5vw, 1.0625rem);
     touch-action: manipulation;
 }
 
@@ -360,7 +360,7 @@
     text-align: left;
     cursor: pointer;
     font-family: inherit;
-    font-size: clamp(0.9375rem, 0.875rem + 0.4vw, 1rem);
+    font-size: clamp(1rem, 0.875rem + 0.4vw, 1.0625rem);
     touch-action: manipulation;
 }
 
@@ -413,7 +413,7 @@
 
 .tier-lede {
     margin: 0.75rem 0 0;
-    font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+    font-size: clamp(1rem, 0.25rem + 2vw, 1.0625rem);
     line-height: 1.65;
     color: #b8c5d9;
 }
@@ -422,7 +422,7 @@
     margin: 1.1rem 0 0;
     padding-top: 1rem;
     border-top: 1px solid rgba(148, 163, 184, 0.12);
-    font-size: 0.9375rem;
+    font-size: 1rem;
     line-height: 1.55;
 }
 
@@ -486,9 +486,14 @@
     vertical-align: top;
 }
 
+.comparison-table tbody th {
+    font-weight: 500;
+    color: #b8c5d9;
+}
+
 .comparison-table thead th {
     color: #fff;
-    font-size: clamp(0.72rem, 1.5vw, 0.86rem);
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
     text-transform: uppercase;
     letter-spacing: 0.07em;
     font-weight: 700;
@@ -565,7 +570,7 @@
 
     .comparison-table {
         min-width: 480px;
-        font-size: 0.9375rem;
+        font-size: 1rem;
     }
 
     .comparison-table th,
@@ -577,6 +582,10 @@
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;
+    }
+
+    .skip-link {
+        transition: none;
     }
 
     .primary-link,
