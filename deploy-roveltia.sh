@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-# Roveltia (roveltia.com) — Docker deploy, modeled after Printbusters publish flow.
+# Roveltia (roveltia.com): Docker deploy, modeled after Printbusters publish flow.
 #
 # Side-by-side safety (does not replace other stacks):
 # - Uses Compose project name "roveltia" (see docker-compose.yml) and DEPLOY_PATH (/opt/roveltia by default).
@@ -13,14 +13,14 @@ set -e
 #   ./deploy-roveltia.sh
 #
 # SSH passwords: this script opens several SSH/rsync connections. They reuse one
-# connection (ControlMaster) so you should only type your password once—unless
+# connection (ControlMaster) so you should only type your password once, unless
 # the shared socket expires mid-deploy (see ControlPersist below).
 #
 # To stop password prompts entirely, install your public key once:
 #   ssh-copy-id -i ~/.ssh/id_ed25519.pub "${SERVER_USER:-root}@${SERVER_HOST:-roveltia.com}"
 # (Use your real key path.) After that, deploy uses the key only.
 
-# Configuration — adjust to your server
+# Configuration: adjust to your server
 SERVER_HOST="${SERVER_HOST:-roveltia.com}"
 SERVER_USER="${SERVER_USER:-root}"
 DEPLOY_PATH="${DEPLOY_PATH:-/opt/roveltia}"

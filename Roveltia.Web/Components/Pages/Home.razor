@@ -56,7 +56,7 @@
             <article>
                 <span class="feature-tag">Hardware</span>
                 <h3>Digital build kit</h3>
-                <p>You get STLs and firmware to download—nothing arrives as an assembled unit. Print the parts and buy components from a BOM.</p>
+                <p>You get STLs and firmware to download: nothing arrives as an assembled unit. Print the parts and buy components from a BOM.</p>
             </article>
             <article>
                 <span class="feature-tag">Control</span>
@@ -66,7 +66,7 @@
             <article>
                 <span class="feature-tag">Remote</span>
                 <h3>IR remote</h3>
-                <p>IR remote is supported on every tier—add a compatible handset if you like. Start and stop motion, nudge direction and speed, run step presets and multi-frame sequences, toggle flash mode and shutter, and return to home—without reaching for the browser.</p>
+                <p>IR remote is supported on every tier. Add a compatible handset if you like. Start and stop motion, nudge direction and speed, run step presets and multi-frame sequences, toggle flash mode and shutter, and return to home, without reaching for the browser.</p>
             </article>
         </div>
     </section>
@@ -164,7 +164,7 @@
             Name = "Roveltia",
             TabHint = "Standard",
             Tagline = "The standard Roveltia experience",
-            Description = "Web UI on the Roveltia access point, continuous rotation (0.2–3.0 RPM), step moves, multi-frame auto sequence, shutter, return to home, set zero, IR remote (same as every tier), and core settings—without Creator’s flash workflow tools.",
+            Description = "Web UI on the Roveltia access point, continuous rotation (0.2-3.0 RPM), step moves, multi-frame auto sequence, shutter, return to home, set zero, IR remote (same as every tier), and core settings, without Creator's flash workflow tools.",
             IdealFor = "Everyday product photography, 360s, and video with browser or remote control.",
             Includes =
             [
@@ -184,7 +184,7 @@
             Name = "Roveltia Creator",
             TabHint = "Photo workflow",
             Tagline = "Built for photography workflows",
-            Description = "Creator adds flash mode: the onboard light sensor arms the workflow, detects strobes, and steps the plate per flash—with optional preflash filtering, shoot-after-settle, and per-frame shutter delay when timing must be exact.",
+            Description = "Creator adds flash mode: the onboard light sensor arms the workflow, detects strobes, and steps the plate per flash, with optional preflash filtering, shoot-after-settle, and per-frame shutter delay when timing must be exact.",
             IdealFor = "Studios and creators who sync strobes, filter preflash, and tune detection and delays.",
             Includes =
             [
@@ -201,7 +201,7 @@
             Name = "Roveltia Developer",
             TabHint = "Full source",
             Tagline = "Made for customization",
-            Description = "Full Arduino/ESP32 source and an editable web UI—fork firmware, change pins or behavior, or ship your own interface. Same Creator capabilities in source form.",
+            Description = "Full Arduino/ESP32 source and an editable web UI: fork firmware, change pins or behavior, or ship your own interface. Same Creator capabilities in source form.",
             IdealFor = "Custom builds, branded UIs, hardware mods, and teams that compile their own binaries.",
             Includes =
             [
@@ -216,10 +216,10 @@
     [
         new("IR remote", "✓", "✓", "✓"),
         new("Web UI, WiFi AP, live status (WebSocket)", "✓", "✓", "✓"),
-        new("Flash mode (LDR strobe detect, step per flash)", "—", "✓", "✓"),
-        new("Preflash ignore (timing window)", "—", "✓", "✓"),
-        new("Tunable flash & shutter timing (settle, debounce, delays)", "—", "✓", "✓"),
-        new("Full source code", "—", "—", "✓")
+        new("Flash mode (LDR strobe detect, step per flash)", "No", "✓", "✓"),
+        new("Preflash ignore (timing window)", "No", "✓", "✓"),
+        new("Tunable flash & shutter timing (settle, debounce, delays)", "No", "✓", "✓"),
+        new("Full source code", "No", "No", "✓")
     ];
 
     private TierModel SelectedTier => Tiers.First(tier => tier.Id == selectedTierId);

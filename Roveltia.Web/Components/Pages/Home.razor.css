@@ -29,7 +29,7 @@
     word-break: break-word;
 }
 
-/* —— Site header —— */
+/* Site header */
 .site-header {
     position: sticky;
     top: 0;
@@ -88,7 +88,7 @@
     background: rgba(255, 255, 255, 0.06);
 }
 
-/* One soft panel per section—no heavy nested card frames */
+/* One soft panel per section; no heavy nested card frames */
 .hero-section,
 .feature-section,
 .tiers-section,
@@ -512,7 +512,7 @@
     font-weight: 700;
 }
 
-/* —— Responsive —— */
+/* Responsive */
 @media (max-width: 1024px) {
     .hero-copy h1 {
         max-width: none;
