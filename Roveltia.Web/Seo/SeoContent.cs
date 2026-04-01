@@ -11,7 +11,7 @@ public static class SeoContent
 
     /// <summary>Meta description for search and social previews.</summary>
     public const string HomeDescription =
-        "Digital download only: a 3D-printable smart turntable for product photos, 360s, and video with phone control, shutter trigger, and advanced photo workflows.";
+        "Digital download only: a 3D-printable smart turntable for product photos, 360s, and video. Easy-to-find BOM electronics, phone control, shutter trigger, and advanced photo workflows.";
 
     public static string HomeCanonical => $"{SiteUrl}/";
 

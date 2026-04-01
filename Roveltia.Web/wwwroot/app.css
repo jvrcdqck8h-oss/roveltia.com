@@ -11,11 +11,13 @@ html,
 body {
     margin: 0;
     min-height: 100%;
+    /* Layered vignettes: warm accent, violet ambient, teal hint */
     background:
-        radial-gradient(ellipse 120% 80% at 50% -20%, rgba(251, 191, 36, 0.12), transparent 50%),
-        radial-gradient(ellipse 80% 50% at 100% 0%, rgba(45, 212, 191, 0.1), transparent 45%),
-        linear-gradient(180deg, #060a12 0%, #0a1220 38%, #0e1829 100%);
-    color: #e8eef8;
+        radial-gradient(ellipse 100% 70% at 50% -15%, rgba(251, 191, 36, 0.09), transparent 55%),
+        radial-gradient(ellipse 70% 50% at 85% 5%, rgba(139, 92, 246, 0.08), transparent 50%),
+        radial-gradient(ellipse 60% 45% at 10% 20%, rgba(45, 212, 191, 0.06), transparent 45%),
+        linear-gradient(165deg, #08090f 0%, #0c1020 42%, #101828 72%, #0d111c 100%);
+    color: #eef2f8;
     font-family: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
     font-feature-settings: "ss01" on, "cv11" on;
     -webkit-font-smoothing: antialiased;
