@@ -1,0 +1,47 @@
+<EditForm Model="_model" OnValidSubmit="HandleSubmit" class="@FormClass">
+    <DataAnnotationsValidator />
+    <div class="waitlist-form__row">
+        <label class="waitlist-form__label" for="@InputId">Enter your email for campaign updates</label>
+        <InputText id="@InputId"
+                   @bind-Value="_model.Email"
+                   class="waitlist-form__input"
+                   placeholder="you@example.com"
+                   type="email"
+                   autocomplete="email"
+                   disabled="@_submitted" />
+        <button type="submit" class="waitlist-form__submit @(Variant == "hero" ? "waitlist-form__submit--hero" : "")" disabled="@_submitted">
+            Join the Waitlist
+        </button>
+    </div>
+    <ValidationMessage For="() => _model.Email" class="waitlist-form__error" />
+</EditForm>
+@if (_submitted)
+{
+    <p class="waitlist-form__thanks" role="status">Thanks! We will notify you when the campaign goes live.</p>
+}
+
+@code {
+    [Parameter] public string FormId { get; set; } = "waitlist";
+
+    /// <summary>Pass "hero" for high-contrast primary button on dark hero backgrounds.</summary>
+    [Parameter] public string Variant { get; set; } = "default";
+
+    private string FormClass => Variant == "hero" ? "waitlist-form waitlist-form--hero" : "waitlist-form";
+
+    private readonly EmailModel _model = new();
+    private bool _submitted;
+
+    private string InputId => $"{FormId}-email";
+
+    private void HandleSubmit()
+    {
+        _submitted = true;
+    }
+
+    private sealed class EmailModel
+    {
+        [Required(ErrorMessage = "Enter an email address.")]
+        [EmailAddress(ErrorMessage = "Enter a valid email address.")]
+        public string? Email { get; set; }
+    }
+}

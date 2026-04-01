@@ -26,78 +26,174 @@
 </HeadContent>
 
 <div class="landing-page">
-<header class="site-header">
-    <div class="site-header-inner">
-        <a class="site-logo" href="/">Roveltia</a>
-        <nav class="site-nav" aria-label="On this page">
-            <a href="#product">Overview</a>
-            <a href="#tiers">Tiers</a>
-            <a href="#compare">Compare</a>
-        </nav>
-    </div>
-</header>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<div class="site-top">
+    <aside class="announcement-bar" role="status">
+        Roveltia is launching on MakerWorld Crowdfunding soon! Be the first to get early access and exclusive backer rewards.
+    </aside>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <a class="site-logo" href="/">Roveltia</a>
+            <nav class="site-nav" aria-label="On this page">
+                <a href="#overview">Overview</a>
+                <a href="#features">Features</a>
+                <a href="#backers">Backers</a>
+                <a href="#tiers">Tiers</a>
+                <a href="#compare">Compare</a>
+                <a href="#waitlist">Waitlist</a>
+            </nav>
+        </div>
+    </header>
+</div>
 
 <main id="main-content" class="landing-shell" tabindex="-1">
     <section class="hero-section" aria-labelledby="hero-heading">
+        <div class="hero-backdrop" aria-hidden="true"></div>
         <div class="hero-copy">
             <p class="hero-digital">
-                <span class="hero-digital-strong">Digital download only</span>
-                <span class="hero-digital-dot" aria-hidden="true">·</span>
-                <span>Print and assemble yourself</span>
-                <span class="hero-digital-dot" aria-hidden="true">·</span>
-                <span>No physical unit shipped</span>
+                <span class="hero-badge">Coming soon to MakerWorld Crowdfunding</span>
             </p>
-            <p class="eyebrow">ESP32-C6 · On-device web control</p>
-            <h1 id="hero-heading">A 3D-printable smart turntable for product photos, 360s, and video.</h1>
-            <p class="hero-text">
-                Roveltia is a digital build kit with STLs and firmware. You print the parts, buy easy-to-find electronics from the BOM, and control the turntable from your phone. No cloud, no subscription.
+            <h1 id="hero-heading">Roveltia — Your Offline Smart Turntable for Product Photography</h1>
+            <p class="hero-subhead">
+                A fully 3D-printable, ESP32-C6 powered motorized turntable.
+                Completely offline. No cloud. No subscriptions. No compromises.
             </p>
 
-            <div class="hero-actions">
-                <a class="primary-link" href="#tiers">Choose a version</a>
-                <a class="secondary-link" href="#product">How it works</a>
+            <div class="hero-cta-row">
+                <WaitlistForm FormId="hero" Variant="hero" />
+                <a class="cta-demo" href="#demo">
+                    <span class="cta-demo__play" aria-hidden="true">▶</span>
+                    Watch the demo
+                </a>
             </div>
+        </div>
+    </section>
 
-            <p class="hero-strip">
-                <span>Offline-first control</span>
-                <span class="hero-strip-dot">·</span>
-                <span>3D-printable build</span>
-                <span class="hero-strip-dot">·</span>
-                <span>Photo and 360 workflows</span>
+    <section class="demo-section section-band" id="demo" aria-labelledby="demo-heading">
+        <div class="section-heading">
+            <p class="eyebrow">See it in motion</p>
+            <h2 id="demo-heading">Demo video</h2>
+            <p class="section-lead">A short walkthrough of Roveltia in action (target 45 to 60 seconds).</p>
+        </div>
+        <div class="demo-video-wrap">
+            @if (!string.IsNullOrEmpty(DemoVideoYoutubeId))
+            {
+                <iframe class="demo-video-frame"
+                        src="@($"https://www.youtube-nocookie.com/embed/{DemoVideoYoutubeId}")"
+                        title="Roveltia demo video"
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen></iframe>
+            }
+            else
+            {
+                <div class="demo-video-placeholder" role="img" aria-label="Demo video placeholder">
+                    <p>Demo video embed goes here.</p>
+                    <p class="demo-video-placeholder__hint">Set <code class="inline-code">DemoVideoYoutubeId</code> in <code class="inline-code">Home.razor</code> to your YouTube video ID.</p>
+                </div>
+            }
+        </div>
+    </section>
+
+    <section class="feature-section" id="overview">
+        <div class="section-heading">
+            <p class="eyebrow">Project overview</p>
+            <h2>Built for makers who care about privacy and control</h2>
+        </div>
+        <div class="overview-prose prose-card">
+            <p>
+                Roveltia is a privacy-focused, maker-built smart turntable designed for effortless 360° product photography, smooth video spins, and content creation.
+                Print the parts on your 3D printer, add affordable electronics, and assemble a professional-grade tool that lives completely offline.
+                Control everything from your phone via its own WiFi access point. No internet connection required.
             </p>
         </div>
     </section>
 
-    <section class="feature-section" id="product">
+    <section class="feature-section section-band" id="features">
         <div class="section-heading">
-            <p class="eyebrow">Overview</p>
-            <h2>How it comes together</h2>
+            <p class="eyebrow">Capabilities</p>
+            <h2>Key features</h2>
         </div>
-
-        <div class="feature-grid feature-grid--three">
-            <article>
-                <span class="feature-tag">Hardware</span>
-                <h3>Digital build kit</h3>
-                <p>You get STLs and firmware to download: nothing arrives as an assembled unit. Print the parts; the BOM lists easy-to-find electronics to buy.</p>
+        <div class="feature-cards">
+            <article class="feature-card">
+                <span class="feature-card__icon" aria-hidden="true">◎</span>
+                <h3 class="feature-card__title">Fully offline</h3>
+                <p class="feature-card__text">Creates its own WiFi (SSID: Roveltia), responsive web UI, and mDNS (<code class="inline-code">http://roveltia.local</code>).</p>
             </article>
-            <article>
-                <span class="feature-tag">Control</span>
-                <h3>Control from your phone</h3>
-                <p>The ESP32 hosts a WiFi access point (SSID Roveltia), serves the control UI, and streams live status over WebSocket. You can also use <code class="inline-code">http://roveltia.local</code> when your device resolves mDNS. Fully offline in the room.</p>
+            <article class="feature-card">
+                <span class="feature-card__icon" aria-hidden="true">↻</span>
+                <h3 class="feature-card__title">Precise motor control</h3>
+                <p class="feature-card__text">Continuous rotation from 0.2 to 3.0 RPM plus accurate step movements.</p>
             </article>
-            <article>
-                <span class="feature-tag">Remote</span>
-                <h3>IR remote</h3>
-                <p>IR remote is supported on every tier. Add a compatible handset if you like. Start and stop motion, nudge direction and speed, run step presets and multi-frame sequences, toggle flash mode and shutter, and return to home, without reaching for the browser.</p>
+            <article class="feature-card">
+                <span class="feature-card__icon" aria-hidden="true">◉</span>
+                <h3 class="feature-card__title">Photo workflows</h3>
+                <p class="feature-card__text">Multi-frame sequences, shutter triggering, and return-to-home positioning.</p>
+            </article>
+            <article class="feature-card">
+                <span class="feature-card__icon" aria-hidden="true">⌁</span>
+                <h3 class="feature-card__title">Flexible control</h3>
+                <p class="feature-card__text">Phone or browser UI plus optional IR remote support.</p>
+            </article>
+            <article class="feature-card">
+                <span class="feature-card__icon" aria-hidden="true">⚡</span>
+                <h3 class="feature-card__title">ESP32-C6</h3>
+                <p class="feature-card__text">Reliable performance and room to grow with firmware updates.</p>
+            </article>
+            <article class="feature-card">
+                <span class="feature-card__icon" aria-hidden="true">▣</span>
+                <h3 class="feature-card__title">Bambu Lab ready</h3>
+                <p class="feature-card__text">High-quality STLs with tested profiles and AMS multi-color options.</p>
             </article>
         </div>
     </section>
 
-    <section class="tiers-section" id="tiers">
+    <section class="feature-section" id="backers">
+        <div class="section-heading">
+            <p class="eyebrow">Campaign</p>
+            <h2>What backers will get</h2>
+            <p class="section-lead">When the campaign launches, MakerWorld backers receive the complete digital build kit:</p>
+        </div>
+        <div class="backers-table-wrap">
+            <table class="backers-table">
+                <caption class="sr-only">Backer tiers and what is included</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Tier</th>
+                        <th scope="col">What is included</th>
+                        <th scope="col">Best for</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Standard</th>
+                        <td>STLs, full assembly guide, BOM, firmware, web UI</td>
+                        <td>Everyday product shots</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Creator</th>
+                        <td>Everything in Standard plus advanced timing and flash tools</td>
+                        <td>Professional photography</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Developer</th>
+                        <td>Full source code plus everything else</td>
+                        <td>Tinkerers and custom mods</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="overview-prose overview-prose--tight">
+            Everything is designed for a smooth build experience with clear instructions, photos, and troubleshooting tips.
+        </p>
+    </section>
+
+    <section class="tiers-section section-band" id="tiers">
         <div class="section-heading">
             <p class="eyebrow">Tiers</p>
             <h2>Choose your Roveltia version</h2>
-            <p class="section-lead">All versions include the same hardware files and the same IR remote support. Choose the firmware level that fits your workflow.</p>
+            <p class="section-lead">All versions include the same hardware files and IR remote support. Pick the firmware level that fits your workflow.</p>
         </div>
 
         <div class="tier-picker" role="group" aria-label="Roveltia versions">
@@ -138,6 +234,28 @@
         </div>
     </section>
 
+    <section class="feature-section makerworld-section section-band" id="makerworld">
+        <div class="section-heading">
+            <p class="eyebrow">MakerWorld</p>
+            <h2>Why we are crowdfunding on MakerWorld</h2>
+        </div>
+        <div class="overview-prose">
+            <p>
+                We want to deliver the highest-quality experience possible: polished documentation, thoroughly tested Bambu Lab print profiles, multiple size variants, and excellent support.
+                Crowdfunding lets us invest the time to make Roveltia truly beginner-friendly for the maker community while keeping it fully owned by you (no subscriptions ever).
+            </p>
+        </div>
+    </section>
+
+    <section class="feature-section waitlist-section section-band section-band--accent" id="waitlist">
+        <div class="section-heading">
+            <p class="eyebrow">Updates</p>
+            <h2>Stay in the loop</h2>
+            <p class="section-lead">The best way to follow progress and get notified when the campaign goes live is to join the waitlist.</p>
+        </div>
+        <WaitlistForm FormId="footer" />
+    </section>
+
     <section class="comparison-section" id="compare">
         <div class="section-heading">
             <p class="eyebrow">Compare</p>
@@ -147,11 +265,11 @@
         <p class="table-scroll-hint" aria-hidden="true">Swipe or scroll on small screens</p>
         <div class="comparison-table-wrap" role="region" aria-label="Tier comparison" tabindex="0">
             <table class="comparison-table">
-                <caption class="sr-only">Compare features across Roveltia, Creator, and Developer</caption>
+                <caption class="sr-only">Compare features across Standard, Creator, and Developer</caption>
                 <thead>
                     <tr>
                         <th scope="col"><span class="sr-only">Feature</span></th>
-                        <th scope="col">Roveltia</th>
+                        <th scope="col">Standard</th>
                         <th scope="col">Creator</th>
                         <th scope="col">Developer</th>
                     </tr>
@@ -171,13 +289,18 @@
         </div>
     </section>
 
-    <footer class="site-footer">
-        <p>Roveltia · ESP32-C6 · Digital build kit · You print and assemble · No device shipped</p>
+    <footer class="site-footer site-footer--cta">
+        <p class="footer-cta">Ready to build your own professional product photography turntable?</p>
+        <p class="footer-cta-sub">Join the waitlist and be among the first to support Roveltia on MakerWorld.</p>
+        <p class="site-footer__legal">© 2026 Roveltia — A project built for makers, by a maker.</p>
     </footer>
 </main>
 </div>
 
 @code {
+    /// <summary>Set to your YouTube video ID (e.g. the part after v=) to show the demo embed; leave null for a placeholder.</summary>
+    private static string? DemoVideoYoutubeId = null;
+
     private static readonly string HomeJsonLd = JsonSerializer.Serialize(
         new Dictionary<string, object?>
         {
@@ -203,13 +326,13 @@
             Name = "Roveltia",
             TabHint = "Standard",
             Tagline = "The standard Roveltia experience",
-            Description = "Web UI on the Roveltia access point, continuous rotation (0.2-3.0 RPM), step moves, multi-frame auto sequence, shutter, return to home, set zero, IR remote (same as every tier), and core settings, without Creator's flash workflow tools.",
+            Description = "Web UI on the Roveltia access point, continuous rotation (0.2 to 3.0 RPM), step moves, multi-frame auto sequence, shutter, return to home, set zero, IR remote (same as every tier), and core settings, without Creator flash workflow tools.",
             IdealFor = "Everyday product photography, 360s, and video with browser or remote control.",
             Includes =
             [
                 "STL pack",
                 "Roveltia firmware (.bin)",
-                "Web UI + live status (WebSocket)",
+                "Web UI and live status (WebSocket)",
                 "WiFi AP control (join network Roveltia)",
                 "Continuous rotation, step moves, auto sequence (full revolution, frame counts)",
                 "Shutter trigger, return to home, set zero",
@@ -221,7 +344,7 @@
         {
             Id = "creator",
             Name = "Roveltia Creator",
-            TabHint = "Photo workflow",
+            TabHint = "Creator",
             Tagline = "Built for photography workflows",
             Description = "Creator adds flash mode: the onboard light sensor arms the workflow, detects strobes, and steps the plate per flash, with optional preflash filtering, shoot-after-settle, and per-frame shutter delay when timing must be exact.",
             IdealFor = "Studios and creators who sync strobes, filter preflash, and tune detection and delays.",
@@ -230,7 +353,7 @@
                 "Everything in Roveltia",
                 "Flash mode (LDR strobe detect, step per flash)",
                 "Preflash ignore with timing window",
-                "Tunable detection & timing (threshold, delta, settle, debounce, shutter delay, shoot after settle)",
+                "Tunable detection and timing (threshold, delta, settle, debounce, shutter delay, shoot after settle)",
                 "Creator firmware (.bin) and photography-oriented documentation"
             ]
         },
@@ -238,9 +361,9 @@
         {
             Id = "developer",
             Name = "Roveltia Developer",
-            TabHint = "Full source",
+            TabHint = "Developer",
             Tagline = "Made for customization",
-            Description = "Full Arduino/ESP32 source and an editable web UI: fork firmware, change pins or behavior, or ship your own interface. Same Creator capabilities in source form.",
+            Description = "Full Arduino and ESP32 source and an editable web UI: fork firmware, change pins or behavior, or ship your own interface. Same Creator capabilities in source form.",
             IdealFor = "Custom builds, branded UIs, hardware mods, and teams that compile their own binaries.",
             Includes =
             [
@@ -257,7 +380,7 @@
         new("Web UI, WiFi AP, live status (WebSocket)", "✓", "✓", "✓"),
         new("Flash mode (LDR strobe detect, step per flash)", "–", "✓", "✓"),
         new("Preflash ignore (timing window)", "–", "✓", "✓"),
-        new("Tunable flash & shutter timing (settle, debounce, delays)", "–", "✓", "✓"),
+        new("Tunable flash and shutter timing (settle, debounce, delays)", "–", "✓", "✓"),
         new("Full source code", "–", "–", "✓")
     ];
 
