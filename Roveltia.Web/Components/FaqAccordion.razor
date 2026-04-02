@@ -1,0 +1,44 @@
+@using Roveltia.Web.Models
+
+<section class="faq-accordion" aria-label="Frequently asked questions">
+    @foreach (var item in Items)
+    {
+        var expanded = OpenId == item.Id;
+        <div class="faq-item @(expanded ? "faq-item--open" : "")">
+            <h3 class="faq-item__heading">
+                <button type="button"
+                        class="faq-item__trigger"
+                        id="@($"faq-btn-{item.Id}")"
+                        aria-expanded="@expanded"
+                        aria-controls="@($"faq-panel-{item.Id}")"
+                        @onclick="() => Toggle(item.Id)">
+                    <span class="faq-item__question">@item.Question</span>
+                    <span class="faq-item__icon" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </span>
+                </button>
+            </h3>
+            <div id="@($"faq-panel-{item.Id}")"
+                 role="region"
+                 class="faq-item__panel"
+                 aria-labelledby="@($"faq-btn-{item.Id}")"
+                 hidden="@(!expanded)">
+                <p class="faq-item__answer">@item.Answer</p>
+            </div>
+        </div>
+    }
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public IReadOnlyList<FaqItem> Items { get; set; } = [];
+
+    private string? OpenId { get; set; }
+
+    private void Toggle(string id)
+    {
+        OpenId = OpenId == id ? null : id;
+    }
+}

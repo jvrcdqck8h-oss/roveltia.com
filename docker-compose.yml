@@ -5,6 +5,9 @@
 #
 # Reverse proxy: point your vhost at http://127.0.0.1:${ROVELTIA_HOST_PORT:-8081}
 # Add ROVELTIA_HOST_PORT=... to .env on the server if 8081 is taken.
+#
+# One container runs PostgreSQL + the web app. Persist DB files with the pgdata volume.
+# Set POSTGRES_PASSWORD in .env (see .env.example).
 
 name: roveltia
 
@@ -23,3 +26,8 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
     ports:
       - "127.0.0.1:${ROVELTIA_HOST_PORT:-8081}:8080"
+    volumes:
+      - pgdata:/var/lib/postgresql/roveltia-data
+
+volumes:
+  pgdata:

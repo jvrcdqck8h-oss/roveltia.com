@@ -1,24 +1,34 @@
-<EditForm Model="_model" OnValidSubmit="HandleSubmit" class="@FormClass">
+<EditForm Model="_model" OnValidSubmit="HandleSubmitAsync" class="@FormClass">
     <DataAnnotationsValidator />
     <div class="waitlist-form__row">
-        <label class="waitlist-form__label" for="@InputId">Enter your email for campaign updates</label>
+        <label class="waitlist-form__label" for="@InputId">Email address</label>
         <InputText id="@InputId"
                    @bind-Value="_model.Email"
                    class="waitlist-form__input"
-                   placeholder="you@example.com"
+                   placeholder="@Placeholder"
                    type="email"
                    autocomplete="email"
-                   disabled="@_submitted" />
-        <button type="submit" class="waitlist-form__submit @(Variant == "hero" ? "waitlist-form__submit--hero" : "")" disabled="@_submitted">
-            Join the Waitlist
+                   disabled="@(_submitted || _submitting)" />
+        <button type="submit" class="waitlist-form__submit @(Variant == "hero" ? "waitlist-form__submit--hero" : "")" disabled="@(_submitted || _submitting)">
+            Join the waitlist
         </button>
     </div>
     <ValidationMessage For="() => _model.Email" class="waitlist-form__error" />
+    @if (!string.IsNullOrEmpty(_submitError))
+    {
+        <p class="waitlist-form__error" role="alert">@_submitError</p>
+    }
+    @if (!_submitted && !string.IsNullOrEmpty(Hint))
+    {
+        <p class="waitlist-form__hint @(Variant == "footer" ? "waitlist-form__hint--footer" : "")">@Hint</p>
+    }
 </EditForm>
 @if (_submitted)
 {
     <p class="waitlist-form__thanks" role="status">Thanks! We will notify you when the campaign goes live.</p>
 }
+
+@inject IWaitlistSignupService WaitlistSignup
 
 @code {
     [Parameter] public string FormId { get; set; } = "waitlist";
@@ -26,16 +36,41 @@
     /// <summary>Pass "hero" for high-contrast primary button on dark hero backgrounds.</summary>
     [Parameter] public string Variant { get; set; } = "default";
 
-    private string FormClass => Variant == "hero" ? "waitlist-form waitlist-form--hero" : "waitlist-form";
+    /// <summary>Optional support line below the field (e.g. launch benefits or no-spam reassurance).</summary>
+    [Parameter] public string? Hint { get; set; }
+
+    [Parameter] public string Placeholder { get; set; } = "you@example.com";
+
+    private string FormClass => Variant switch
+    {
+        "hero" => "waitlist-form waitlist-form--hero",
+        "footer" => "waitlist-form waitlist-form--footer",
+        _ => "waitlist-form",
+    };
 
     private readonly EmailModel _model = new();
     private bool _submitted;
+    private bool _submitting;
+    private string? _submitError;
 
     private string InputId => $"{FormId}-email";
 
-    private void HandleSubmit()
+    private async Task HandleSubmitAsync()
     {
-        _submitted = true;
+        _submitError = null;
+        _submitting = true;
+        try
+        {
+            var result = await WaitlistSignup.TryAddAsync(_model.Email!);
+            if (result is WaitlistSignupResult.Added or WaitlistSignupResult.AlreadyRegistered)
+                _submitted = true;
+            else
+                _submitError = "Something went wrong. Please try again in a moment.";
+        }
+        finally
+        {
+            _submitting = false;
+        }
     }
 
     private sealed class EmailModel

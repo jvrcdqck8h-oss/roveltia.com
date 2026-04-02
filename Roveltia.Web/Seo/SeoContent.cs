@@ -7,11 +7,11 @@ public static class SeoContent
     public const string SiteName = "Roveltia";
 
     /// <summary>Primary document title.</summary>
-    public const string HomeTitle = "Roveltia | Offline Smart Turntable for Product Photography (MakerWorld)";
+    public const string HomeTitle = "Roveltia | Offline, 3D-printable smart turntable for smooth 360° product photos";
 
     /// <summary>Meta description for search and social previews.</summary>
     public const string HomeDescription =
-        "Fully 3D-printable, ESP32-C6 powered turntable for 360° product photos and video spins. Offline, no cloud, no subscriptions. Coming soon to MakerWorld Crowdfunding.";
+        "An offline, 3D-printable smart turntable for smooth 360° product photography. Build it yourself. Control it from your phone. Shoot repeatable 360° product photos without cloud software.";
 
     public static string HomeCanonical => $"{SiteUrl}/";
 

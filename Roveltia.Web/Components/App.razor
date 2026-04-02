@@ -5,7 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <meta name="theme-color" content="#0c1020" />
+    <!-- Safari / Chrome use theme-color for toolbar tint; repeat so light/dark system prefs both pick the dark tint -->
+    <meta name="theme-color" content="#05060a" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#05060a" media="(prefers-color-scheme: dark)" />
+    <!-- Home-screen / standalone: dark status bar (in-tab Safari may still use system chrome) -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="format-detection" content="telephone=no" />
     <base href="/" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -24,6 +28,7 @@
     <Routes />
     <ReconnectModal />
     <script src="@Assets["_framework/blazor.web.js"]"></script>
+    <script src="js/landing-reveal.js"></script>
 </body>
 
 </html>

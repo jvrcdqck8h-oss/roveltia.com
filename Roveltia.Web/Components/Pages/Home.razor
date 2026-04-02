@@ -1,5 +1,7 @@
 @page "/"
 @rendermode InteractiveServer
+@using Roveltia.Web.Models
+@inject IJSRuntime JS
 
 <PageTitle>@SeoContent.HomeTitle</PageTitle>
 
@@ -25,263 +27,348 @@
     <script type="application/ld+json">@((MarkupString)HomeJsonLd)</script>
 </HeadContent>
 
-<div class="landing-page">
-<a class="skip-link" href="#main-content">Skip to main content</a>
+<div class="lp">
 
-<div class="site-top">
-    <aside class="announcement-bar" role="status">
-        Roveltia is launching on MakerWorld Crowdfunding soon! Be the first to get early access and exclusive backer rewards.
-    </aside>
-    <header class="site-header">
-        <div class="site-header-inner">
-            <a class="site-logo" href="/">Roveltia</a>
-            <nav class="site-nav" aria-label="On this page">
-                <a href="#overview">Overview</a>
-                <a href="#features">Features</a>
-                <a href="#backers">Backers</a>
-                <a href="#tiers">Tiers</a>
-                <a href="#compare">Compare</a>
-                <a href="#waitlist">Waitlist</a>
-            </nav>
-        </div>
-    </header>
-</div>
+<a class="lp__skip" href="#main">Skip to main content</a>
 
-<main id="main-content" class="landing-shell" tabindex="-1">
-    <section class="hero-section" aria-labelledby="hero-heading">
-        <div class="hero-backdrop" aria-hidden="true"></div>
-        <div class="hero-copy">
-            <p class="hero-digital">
-                <span class="hero-badge">Coming soon to MakerWorld Crowdfunding</span>
-            </p>
-            <h1 id="hero-heading">Roveltia — Your Offline Smart Turntable for Product Photography</h1>
-            <p class="hero-subhead">
-                A fully 3D-printable, ESP32-C6 powered motorized turntable.
-                Completely offline. No cloud. No subscriptions. No compromises.
-            </p>
+<header class="lp__header">
+    <div class="lp__nav">
+        <a class="lp__logo" href="/" aria-label="Roveltia home">Roveltia</a>
+        <nav class="lp__nav-links" aria-label="Primary navigation">
+            <a href="#how">How it works</a>
+            <a href="#features">Features</a>
+            <a href="#tiers">Tiers</a>
+            <a href="#faq">FAQ</a>
+            <a class="lp__nav-cta" href="#waitlist">Join the waitlist</a>
+        </nav>
+    </div>
+</header>
 
-            <div class="hero-cta-row">
-                <WaitlistForm FormId="hero" Variant="hero" />
-                <a class="cta-demo" href="#demo">
-                    <span class="cta-demo__play" aria-hidden="true">▶</span>
-                    Watch the demo
-                </a>
+<main id="main" class="lp__main" tabindex="-1">
+
+    <!-- ── Hero ─────────────────────────────────────────────────────── -->
+    <section class="hero" id="product" aria-labelledby="hero-h">
+        <div class="hero__grid">
+            <div class="hero__copy">
+                <p class="hero__trust" role="note">
+                    Digital build kit only · No physical unit shipped · No cloud · No subscription
+                </p>
+                <h1 id="hero-h" class="hero__title">
+                    Shoot smooth 360° product photos with a fully offline, 3D-printable smart turntable.
+                </h1>
+                <p class="hero__lead">
+                    Build it yourself, control it from your phone, and run repeatable product-photo
+                    workflows without cloud apps, subscriptions, or closed hardware.
+                </p>
+                <div class="hero__actions">
+                    <WaitlistForm FormId="hero"
+                                  Variant="hero"
+                                  Placeholder="Enter your email"
+                                  Hint="Early backer updates, launch notice, and prototype progress." />
+                    @if (!string.IsNullOrEmpty(DemoVideoYoutubeId))
+                    {
+                        <a class="btn-ghost" href="#demo">Watch the demo</a>
+                    }
+                </div>
+            </div>
+            <div class="hero__visual" aria-hidden="true">
+                <div class="turntable">
+                    <div class="turntable__glow"></div>
+                    <div class="turntable__ring"></div>
+                    <div class="turntable__plate"></div>
+                    <div class="turntable__base"></div>
+                    <span class="turntable__chip">ESP32-C6</span>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="demo-section section-band" id="demo" aria-labelledby="demo-heading">
-        <div class="section-heading">
-            <p class="eyebrow">See it in motion</p>
-            <h2 id="demo-heading">Demo video</h2>
-            <p class="section-lead">A short walkthrough of Roveltia in action (target 45 to 60 seconds).</p>
+    <!-- ── How it works ──────────────────────────────────────────────── -->
+    <section class="sect sect--open section-reveal" id="how" aria-labelledby="how-h">
+        <div class="sect__head">
+            <p class="eyebrow">How it works</p>
+            <h2 id="how-h" class="sect__title">From files to flawless spins</h2>
+            <p class="sect__sub">Print the parts, assemble the electronics, and start shooting from your
+                phone. Roveltia is designed to take you from download to first spin with as little
+                friction as possible.</p>
         </div>
-        <div class="demo-video-wrap">
-            @if (!string.IsNullOrEmpty(DemoVideoYoutubeId))
+        <ol class="steps">
+            @foreach (var (step, i) in HowItWorksSteps.Select((s, i) => (s, i)))
             {
-                <iframe class="demo-video-frame"
+                <li class="steps__item">
+                    <span class="steps__num" aria-hidden="true">0@(i + 1)</span>
+                    <div class="steps__icon" aria-hidden="true">@((MarkupString)step.IconSvg)</div>
+                    <h3 class="steps__title">@step.Title</h3>
+                    <p class="steps__text">@step.Text</p>
+                </li>
+            }
+        </ol>
+    </section>
+
+    <!-- ── Demo (only shown when a YouTube ID is configured) ─────────── -->
+    @if (!string.IsNullOrEmpty(DemoVideoYoutubeId))
+    {
+        <section class="sect sect--band section-reveal" id="demo" aria-labelledby="demo-h">
+            <div class="sect__head">
+                <p class="eyebrow">Demo</p>
+                <h2 id="demo-h" class="sect__title">See Roveltia in action</h2>
+                <p class="sect__sub">Watch a full capture cycle, from first movement to repeatable 360° output.</p>
+            </div>
+            <div class="video-wrap">
+                <iframe class="video-frame"
                         src="@($"https://www.youtube-nocookie.com/embed/{DemoVideoYoutubeId}")"
-                        title="Roveltia demo video"
+                        title="Roveltia — watch the 45-second demo"
                         loading="lazy"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowfullscreen></iframe>
-            }
-            else
+            </div>
+        </section>
+    }
+
+    <!-- ── Product showcase strip ───────────────────────────────────── -->
+    <div class="showcase section-reveal" aria-hidden="true">
+        <div class="showcase__wash"></div>
+        <div class="turntable turntable--lg">
+            <div class="turntable__glow"></div>
+            <div class="turntable__ring"></div>
+            <div class="turntable__plate"></div>
+            <div class="turntable__base"></div>
+            <span class="turntable__chip">ESP32-C6</span>
+        </div>
+        <p class="showcase__caption">
+            3D-printable chassis · Phone-controlled spins · Fully offline · 28BYJ-48 stepper · 0.2–3.0 RPM
+        </p>
+    </div>
+
+    <!-- ── Features ─────────────────────────────────────────────────── -->
+    <section class="sect sect--surface section-reveal" id="features" aria-labelledby="feat-h">
+        <div class="sect__head">
+            <p class="eyebrow">Why Roveltia</p>
+            <h2 id="feat-h" class="sect__title">Engineered for offline workflows</h2>
+            <p class="sect__sub">The control of a dedicated product-photo tool without forcing you into
+                cloud software, subscriptions, or locked hardware.</p>
+        </div>
+        <div class="feat-grid">
+            @foreach (var f in FeatureBlocks)
             {
-                <div class="demo-video-placeholder" role="img" aria-label="Demo video placeholder">
-                    <p>Demo video embed goes here.</p>
-                    <p class="demo-video-placeholder__hint">Set <code class="inline-code">DemoVideoYoutubeId</code> in <code class="inline-code">Home.razor</code> to your YouTube video ID.</p>
+                <article class="feat-card">
+                    <div class="feat-card__icon" aria-hidden="true">@((MarkupString)f.IconSvg)</div>
+                    <h3 class="feat-card__title">@f.Title</h3>
+                    <p class="feat-card__text">@f.Text</p>
+                    @if (!string.IsNullOrEmpty(f.Stat))
+                    {
+                        <p class="feat-card__stat">@f.Stat</p>
+                    }
+                    @if (!string.IsNullOrEmpty(f.Technical))
+                    {
+                        <p class="feat-card__tech">@f.Technical</p>
+                    }
+                </article>
+            }
+        </div>
+    </section>
+
+    <!-- ── Who it's for ──────────────────────────────────────────────── -->
+    <section class="sect section-reveal" id="audiences" aria-labelledby="who-h">
+        <div class="sect__head">
+            <p class="eyebrow">Who it's for</p>
+            <h2 id="who-h" class="sect__title">Built for people who want control</h2>
+            <p class="sect__sub">Whether you're shooting products for a store, building tools for your
+                studio, or creating hardware workflows, Roveltia is made for hands-on users who want
+                repeatable results.</p>
+        </div>
+        <div class="audience-grid">
+            @foreach (var w in WorkflowCards)
+            {
+                <article class="audience-card">
+                    <div class="audience-card__icon" aria-hidden="true">@((MarkupString)w.IconSvg)</div>
+                    <h3 class="audience-card__title">@w.Title</h3>
+                    <p class="audience-card__text">@w.Text</p>
+                </article>
+            }
+        </div>
+    </section>
+
+    <!-- ── Tiers ─────────────────────────────────────────────────────── -->
+    <section class="sect sect--tiers section-reveal" id="tiers" aria-labelledby="tiers-h">
+        <div class="sect__head">
+            <p class="eyebrow">Choose your tier</p>
+            <h2 id="tiers-h" class="sect__title">Standard, Creator, or Developer</h2>
+            <p class="sect__sub">All three tiers use the same printed hardware. The difference is how far
+                you want to go into photography tooling and customization.</p>
+        </div>
+        <div class="tier-grid" role="list">
+            @foreach (var tier in TierCards)
+            {
+                <article class="tier-card @(tier.Id == "creator" ? "tier-card--featured" : "") @(tier.Badge is not null ? "tier-card--badged" : "")"
+                         role="listitem"
+                         aria-label="@(tier.Name) tier">
+                    @if (tier.Badge is not null)
+                    {
+                        <span class="tier-card__badge" role="note">@tier.Badge</span>
+                    }
+                    <h3 class="tier-card__name">@tier.Name</h3>
+                    <p class="tier-card__who">@tier.WhoFor</p>
+                    <p class="tier-card__detail">@tier.Detail</p>
+                </article>
+            }
+        </div>
+        <p class="tier-note">
+            Need the full feature breakdown?
+            <a href="#compare">Compare every capability in the matrix below.</a>
+        </p>
+    </section>
+
+    <!-- ── What you get ──────────────────────────────────────────────── -->
+    <section class="sect sect--band section-reveal" id="what-you-get" aria-labelledby="wyg-h">
+        <div class="sect__head">
+            <p class="eyebrow">Included</p>
+            <h2 id="wyg-h" class="sect__title">Everything in your digital kit</h2>
+            <p class="sect__sub">Download the files, print the parts, assemble the electronics, and run
+                the workflow from Roveltia's on-device software.</p>
+        </div>
+        <ul class="wyg-grid" role="list">
+            @foreach (var item in WygDeliverables)
+            {
+                <li class="wyg-tile">
+                    <div class="wyg-tile__icon" aria-hidden="true">@((MarkupString)item.IconSvg)</div>
+                    <div class="wyg-tile__body">
+                        <span class="wyg-tile__label">@item.Label</span>
+                        <span class="wyg-tile__sub">@item.Sub</span>
+                    </div>
+                </li>
+            }
+        </ul>
+    </section>
+
+    <!-- ── Before you back ───────────────────────────────────────────── -->
+    <section class="sect sect--open section-reveal" id="before-you-back" aria-labelledby="byb-h">
+        <div class="sect__head">
+            <p class="eyebrow">Before you back</p>
+            <h2 id="byb-h" class="sect__title">Know what to expect</h2>
+            <p class="sect__sub">Get clear on printer requirements, electronics cost, build time, and
+                skill level so you can decide with confidence.</p>
+        </div>
+        <div class="expect-grid" role="list">
+            @foreach (var row in BeforeYouBackRows)
+            {
+                <div class="expect-card" role="listitem">
+                    <div class="expect-card__icon" aria-hidden="true">@((MarkupString)row.IconSvg)</div>
+                    <div class="expect-card__body">
+                        <span class="expect-card__label">@row.Label</span>
+                        <p class="expect-card__value">@row.Value</p>
+                    </div>
                 </div>
             }
         </div>
     </section>
 
-    <section class="feature-section" id="overview">
-        <div class="section-heading">
-            <p class="eyebrow">Project overview</p>
-            <h2>Built for makers who care about privacy and control</h2>
-        </div>
-        <div class="overview-prose prose-card">
-            <p>
-                Roveltia is a privacy-focused, maker-built smart turntable designed for effortless 360° product photography, smooth video spins, and content creation.
-                Print the parts on your 3D printer, add affordable electronics, and assemble a professional-grade tool that lives completely offline.
-                Control everything from your phone via its own WiFi access point. No internet connection required.
-            </p>
-        </div>
-    </section>
-
-    <section class="feature-section section-band" id="features">
-        <div class="section-heading">
-            <p class="eyebrow">Capabilities</p>
-            <h2>Key features</h2>
-        </div>
-        <div class="feature-cards">
-            <article class="feature-card">
-                <span class="feature-card__icon" aria-hidden="true">◎</span>
-                <h3 class="feature-card__title">Fully offline</h3>
-                <p class="feature-card__text">Creates its own WiFi (SSID: Roveltia), responsive web UI, and mDNS (<code class="inline-code">http://roveltia.local</code>).</p>
-            </article>
-            <article class="feature-card">
-                <span class="feature-card__icon" aria-hidden="true">↻</span>
-                <h3 class="feature-card__title">Precise motor control</h3>
-                <p class="feature-card__text">Continuous rotation from 0.2 to 3.0 RPM plus accurate step movements.</p>
-            </article>
-            <article class="feature-card">
-                <span class="feature-card__icon" aria-hidden="true">◉</span>
-                <h3 class="feature-card__title">Photo workflows</h3>
-                <p class="feature-card__text">Multi-frame sequences, shutter triggering, and return-to-home positioning.</p>
-            </article>
-            <article class="feature-card">
-                <span class="feature-card__icon" aria-hidden="true">⌁</span>
-                <h3 class="feature-card__title">Flexible control</h3>
-                <p class="feature-card__text">Phone or browser UI plus optional IR remote support.</p>
-            </article>
-            <article class="feature-card">
-                <span class="feature-card__icon" aria-hidden="true">⚡</span>
-                <h3 class="feature-card__title">ESP32-C6</h3>
-                <p class="feature-card__text">Reliable performance and room to grow with firmware updates.</p>
-            </article>
-            <article class="feature-card">
-                <span class="feature-card__icon" aria-hidden="true">▣</span>
-                <h3 class="feature-card__title">Bambu Lab ready</h3>
-                <p class="feature-card__text">High-quality STLs with tested profiles and AMS multi-color options.</p>
-            </article>
-        </div>
-    </section>
-
-    <section class="feature-section" id="backers">
-        <div class="section-heading">
-            <p class="eyebrow">Campaign</p>
-            <h2>What backers will get</h2>
-            <p class="section-lead">When the campaign launches, MakerWorld backers receive the complete digital build kit:</p>
-        </div>
-        <div class="backers-table-wrap">
-            <table class="backers-table">
-                <caption class="sr-only">Backer tiers and what is included</caption>
-                <thead>
-                    <tr>
-                        <th scope="col">Tier</th>
-                        <th scope="col">What is included</th>
-                        <th scope="col">Best for</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">Standard</th>
-                        <td>STLs, full assembly guide, BOM, firmware, web UI</td>
-                        <td>Everyday product shots</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Creator</th>
-                        <td>Everything in Standard plus advanced timing and flash tools</td>
-                        <td>Professional photography</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Developer</th>
-                        <td>Full source code plus everything else</td>
-                        <td>Tinkerers and custom mods</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <p class="overview-prose overview-prose--tight">
-            Everything is designed for a smooth build experience with clear instructions, photos, and troubleshooting tips.
-        </p>
-    </section>
-
-    <section class="tiers-section section-band" id="tiers">
-        <div class="section-heading">
-            <p class="eyebrow">Tiers</p>
-            <h2>Choose your Roveltia version</h2>
-            <p class="section-lead">All versions include the same hardware files and IR remote support. Pick the firmware level that fits your workflow.</p>
+    <!-- ── Compare ───────────────────────────────────────────────────── -->
+    <section class="sect section-reveal" id="compare" aria-labelledby="cmp-h">
+        <div class="sect__head">
+            <p class="eyebrow">Compare features</p>
+            <h2 id="cmp-h" class="sect__title">Capability matrix</h2>
+            <p class="sect__sub">Compare all four tiers side by side. Each tier includes everything
+                in the ones below it.</p>
         </div>
 
-        <div class="tier-picker" role="group" aria-label="Roveltia versions">
-            @foreach (var tier in Tiers)
-            {
-                <button type="button"
-                        class="@(SelectedTier.Id == tier.Id ? "tier-tab active" : "tier-tab")"
-                        aria-pressed="@(SelectedTier.Id == tier.Id)"
-                        @onclick="() => SelectTier(tier.Id)">
-                    <span>@tier.Name</span>
-                    @if (!string.IsNullOrEmpty(tier.TabHint))
-                    {
-                        <small>@tier.TabHint</small>
-                    }
-                </button>
-            }
-        </div>
-
-        <div class="tier-spotlight" id="tier-spotlight">
-            <div class="tier-headline">
-                <p class="tier-eyebrow-name">@SelectedTier.Name</p>
-                <h3>@SelectedTier.Tagline</h3>
-                <p class="tier-lede">@SelectedTier.Description</p>
-            </div>
-
-            <div class="tier-columns tier-columns--single">
-                <article>
-                    <h4>Includes</h4>
-                    <ul>
-                        @foreach (var item in SelectedTier.Includes)
-                        {
-                            <li>@item</li>
-                        }
+        <!-- Mobile: tier highlight blocks + accordion rows -->
+        <div class="cmp-mobile glass-card" role="region" aria-label="Tier highlights">
+            <div class="cmp-mobile__blocks">
+                <div class="cmp-mobile__block">
+                    <h3 class="cmp-mobile__h">Standard includes</h3>
+                    <ul class="cmp-mobile__list">
+                        <li>IR remote support</li>
+                        <li>Web UI, WiFi access point, live status</li>
                     </ul>
-                    <p class="tier-ideal"><strong>Best for:</strong> @SelectedTier.IdealFor</p>
-                </article>
+                </div>
+                <div class="cmp-mobile__block cmp-mobile__block--cyan">
+                    <h3 class="cmp-mobile__h">Only in Creator+</h3>
+                    <ul class="cmp-mobile__list">
+                        <li>Flash mode (strobe detect, step per flash)</li>
+                        <li>Preflash ignore window</li>
+                        <li>Tunable flash and shutter timing</li>
+                    </ul>
+                </div>
+                <div class="cmp-mobile__block cmp-mobile__block--violet">
+                    <h3 class="cmp-mobile__h">Only in Developer+</h3>
+                    <ul class="cmp-mobile__list">
+                        <li>Full firmware and web UI source code</li>
+                    </ul>
+                </div>
+                <div class="cmp-mobile__block cmp-mobile__block--amber">
+                    <h3 class="cmp-mobile__h">Only in Commercial</h3>
+                    <ul class="cmp-mobile__list">
+                        <li>STEP files — editable chassis geometry</li>
+                    </ul>
+                </div>
             </div>
+            <details class="cmp-mobile__more">
+                <summary class="cmp-mobile__more-trigger">Show full capability table</summary>
+                <div class="cmp-mobile__rows">
+                    @foreach (var row in ComparisonRows)
+                    {
+                        <details class="cmp-row">
+                            <summary class="cmp-row__name">@row.Name</summary>
+                            <dl class="cmp-row__cells">
+                                <div class="cmp-row__cell">
+                                    <dt>Standard</dt>
+                                    <dd>@FormatCell(row.Base)</dd>
+                                </div>
+                                <div class="cmp-row__cell">
+                                    <dt>Creator</dt>
+                                    <dd>@FormatCell(row.Creator)</dd>
+                                </div>
+                                <div class="cmp-row__cell">
+                                    <dt>Developer</dt>
+                                    <dd>@FormatCell(row.Developer)</dd>
+                                </div>
+                                <div class="cmp-row__cell">
+                                    <dt>Commercial</dt>
+                                    <dd>@FormatCell(row.Commercial)</dd>
+                                </div>
+                            </dl>
+                        </details>
+                    }
+                </div>
+            </details>
         </div>
-    </section>
 
-    <section class="feature-section makerworld-section section-band" id="makerworld">
-        <div class="section-heading">
-            <p class="eyebrow">MakerWorld</p>
-            <h2>Why we are crowdfunding on MakerWorld</h2>
-        </div>
-        <div class="overview-prose">
-            <p>
-                We want to deliver the highest-quality experience possible: polished documentation, thoroughly tested Bambu Lab print profiles, multiple size variants, and excellent support.
-                Crowdfunding lets us invest the time to make Roveltia truly beginner-friendly for the maker community while keeping it fully owned by you (no subscriptions ever).
-            </p>
-        </div>
-    </section>
-
-    <section class="feature-section waitlist-section section-band section-band--accent" id="waitlist">
-        <div class="section-heading">
-            <p class="eyebrow">Updates</p>
-            <h2>Stay in the loop</h2>
-            <p class="section-lead">The best way to follow progress and get notified when the campaign goes live is to join the waitlist.</p>
-        </div>
-        <WaitlistForm FormId="footer" />
-    </section>
-
-    <section class="comparison-section" id="compare">
-        <div class="section-heading">
-            <p class="eyebrow">Compare</p>
-            <h2>Decide at a glance</h2>
-        </div>
-
-        <p class="table-scroll-hint" aria-hidden="true">Swipe or scroll on small screens</p>
-        <div class="comparison-table-wrap" role="region" aria-label="Tier comparison" tabindex="0">
-            <table class="comparison-table">
-                <caption class="sr-only">Compare features across Standard, Creator, and Developer</caption>
+        <!-- Desktop: full table -->
+        <p class="cmp-hint" aria-hidden="true">Scroll horizontally to see all columns on small screens</p>
+        <div class="cmp-table-wrap glass-card" role="region" aria-label="Feature comparison table" tabindex="0">
+            <table class="cmp-table">
+                <caption class="sr-only">Feature comparison: Standard, Creator, Developer, Commercial</caption>
                 <thead>
                     <tr>
-                        <th scope="col"><span class="sr-only">Feature</span></th>
-                        <th scope="col">Standard</th>
-                        <th scope="col">Creator</th>
-                        <th scope="col">Developer</th>
+                        <th scope="col">Capability</th>
+                        <th scope="col">
+                            <span class="cmp-th-name">Standard</span>
+                            <span class="cmp-th-tag">Best entry</span>
+                        </th>
+                        <th scope="col">
+                            <span class="cmp-th-name">Creator</span>
+                            <span class="cmp-th-tag">Most popular</span>
+                        </th>
+                        <th scope="col">
+                            <span class="cmp-th-name">Developer</span>
+                            <span class="cmp-th-tag">Full access</span>
+                        </th>
+                        <th scope="col">
+                            <span class="cmp-th-name">Commercial</span>
+                            <span class="cmp-th-tag">Hardware rights</span>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var feature in ComparisonRows)
+                    @foreach (var row in ComparisonRows)
                     {
                         <tr>
-                            <th scope="row">@feature.Name</th>
-                            <td>@feature.Base</td>
-                            <td>@feature.Creator</td>
-                            <td>@feature.Developer</td>
+                            <th scope="row">@row.Name</th>
+                            <td class="cmp-table__cell @CellClass(row.Base)">@FormatCell(row.Base)</td>
+                            <td class="cmp-table__cell @CellClass(row.Creator)">@FormatCell(row.Creator)</td>
+                            <td class="cmp-table__cell @CellClass(row.Developer)">@FormatCell(row.Developer)</td>
+                            <td class="cmp-table__cell @CellClass(row.Commercial)">@FormatCell(row.Commercial)</td>
                         </tr>
                     }
                 </tbody>
@@ -289,16 +376,67 @@
         </div>
     </section>
 
-    <footer class="site-footer site-footer--cta">
-        <p class="footer-cta">Ready to build your own professional product photography turntable?</p>
-        <p class="footer-cta-sub">Join the waitlist and be among the first to support Roveltia on MakerWorld.</p>
-        <p class="site-footer__legal">© 2026 Roveltia — A project built for makers, by a maker.</p>
+    <!-- ── FAQ ───────────────────────────────────────────────────────── -->
+    <section class="sect sect--narrow section-reveal" id="faq" aria-labelledby="faq-h">
+        <div class="sect__head">
+            <p class="eyebrow">FAQ</p>
+            <h2 id="faq-h" class="sect__title">Questions, answered</h2>
+        </div>
+        <FaqAccordion Items="FaqItems" />
+    </section>
+
+    <!-- ── Final CTA ─────────────────────────────────────────────────── -->
+    <section class="sect sect--cta section-reveal" id="waitlist" aria-labelledby="cta-h">
+        <div class="cta-card">
+            <p class="eyebrow eyebrow--on-glow">Waitlist</p>
+            <h2 id="cta-h" class="cta-card__title">Be first to know when Roveltia launches.</h2>
+            <p class="cta-card__sub">Early-backer rewards, campaign day access, and prototype progress
+                — straight to your inbox when it matters.</p>
+            <WaitlistForm FormId="footer"
+                          Variant="footer"
+                          Placeholder="Enter your email"
+                          Hint="" />
+            <ul class="cta-trust" aria-label="Email commitment">
+                <li class="cta-trust__item">
+                    <svg class="cta-trust__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4L6.5 10.5 3 7"/></svg>
+                    No spam
+                </li>
+                <li class="cta-trust__item">
+                    <svg class="cta-trust__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4L6.5 10.5 3 7"/></svg>
+                    Campaign updates only
+                </li>
+                <li class="cta-trust__item">
+                    <svg class="cta-trust__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4L6.5 10.5 3 7"/></svg>
+                    Unsubscribe anytime
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ── Footer ────────────────────────────────────────────────────── -->
+    <footer class="lp__footer">
+        <p class="lp__footer-logo">Roveltia</p>
+        <p class="lp__footer-tag">
+            An offline-first smart turntable kit for makers and product photographers.
+        </p>
+        <p class="lp__footer-fine">
+            © @DateTime.UtcNow.Year Roveltia · Digital build kit only · No cloud · No subscription
+        </p>
     </footer>
+
 </main>
 </div>
 
 @code {
-    /// <summary>Set to your YouTube video ID (e.g. the part after v=) to show the demo embed; leave null for a placeholder.</summary>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try { await JS.InvokeVoidAsync("roveltiaLandingReveal.init"); }
+            catch (JSException) { /* script may not be available in all environments */ }
+        }
+    }
+
     private static string? DemoVideoYoutubeId = null;
 
     private static readonly string HomeJsonLd = JsonSerializer.Serialize(
@@ -318,91 +456,205 @@
             }
         });
 
-    private readonly List<TierModel> Tiers =
+    /* ── FAQ ──────────────────────────────────────────────────────────── */
+
+    private static readonly IReadOnlyList<FaqItem> FaqItems =
     [
-        new()
-        {
-            Id = "roveltia",
-            Name = "Roveltia",
-            TabHint = "Standard",
-            Tagline = "The standard Roveltia experience",
-            Description = "Web UI on the Roveltia access point, continuous rotation (0.2 to 3.0 RPM), step moves, multi-frame auto sequence, shutter, return to home, set zero, IR remote (same as every tier), and core settings, without Creator flash workflow tools.",
-            IdealFor = "Everyday product photography, 360s, and video with browser or remote control.",
-            Includes =
-            [
-                "STL pack",
-                "Roveltia firmware (.bin)",
-                "Web UI and live status (WebSocket)",
-                "WiFi AP control (join network Roveltia)",
-                "Continuous rotation, step moves, auto sequence (full revolution, frame counts)",
-                "Shutter trigger, return to home, set zero",
-                "IR remote (all tiers; handset optional)",
-                "Core settings (RPM, step angle, direction, and more)"
-            ]
-        },
-        new()
-        {
-            Id = "creator",
-            Name = "Roveltia Creator",
-            TabHint = "Creator",
-            Tagline = "Built for photography workflows",
-            Description = "Creator adds flash mode: the onboard light sensor arms the workflow, detects strobes, and steps the plate per flash, with optional preflash filtering, shoot-after-settle, and per-frame shutter delay when timing must be exact.",
-            IdealFor = "Studios and creators who sync strobes, filter preflash, and tune detection and delays.",
-            Includes =
-            [
-                "Everything in Roveltia",
-                "Flash mode (LDR strobe detect, step per flash)",
-                "Preflash ignore with timing window",
-                "Tunable detection and timing (threshold, delta, settle, debounce, shutter delay, shoot after settle)",
-                "Creator firmware (.bin) and photography-oriented documentation"
-            ]
-        },
-        new()
-        {
-            Id = "developer",
-            Name = "Roveltia Developer",
-            TabHint = "Developer",
-            Tagline = "Made for customization",
-            Description = "Full Arduino and ESP32 source and an editable web UI: fork firmware, change pins or behavior, or ship your own interface. Same Creator capabilities in source form.",
-            IdealFor = "Custom builds, branded UIs, hardware mods, and teams that compile their own binaries.",
-            Includes =
-            [
-                "Everything in Roveltia Creator",
-                "Full firmware source (Arduino IDE / esp32 board package)",
-                "Editable web UI (web_page.h and project sources)"
-            ]
-        }
+        new("finished", "Is Roveltia a finished turntable?",
+            "No. Roveltia is a digital build kit, not a pre-assembled product. You download the files " +
+            "and firmware, print the parts yourself, and source the electronics from the published BOM."),
+        new("cloud", "Does it require cloud services or a subscription?",
+            "No. Roveltia runs locally on the device over its own WiFi access point with an on-device " +
+            "web UI. No cloud service or subscription is required."),
+        new("control", "How do I control it during a shoot?",
+            "You connect directly to Roveltia from your phone or browser and control spins, steps, " +
+            "sequences, and workflow actions from the built-in interface. An IR remote is also " +
+            "supported for hands-free operation."),
+        new("tiers", "What is the difference between Standard, Creator, and Developer?",
+            "Standard gives you the core build and workflow features. Creator adds advanced " +
+            "photography-oriented tools including flash mode, strobe detection, and tunable timing. " +
+            "Developer adds source code access for full customization."),
+        new("print", "What kind of printer do I need?",
+            "Roveltia is designed for FDM printing. The build guide will help you understand the " +
+            "expected setup and part requirements before you start."),
     ];
 
-    private readonly List<ComparisonRow> ComparisonRows =
+    /* ── How it works ─────────────────────────────────────────────────── */
+
+    private sealed record HowItWorksStep(string Title, string Text, string IconSvg);
+
+    private static readonly IReadOnlyList<HowItWorksStep> HowItWorksSteps =
     [
-        new("IR remote", "✓", "✓", "✓"),
-        new("Web UI, WiFi AP, live status (WebSocket)", "✓", "✓", "✓"),
-        new("Flash mode (LDR strobe detect, step per flash)", "–", "✓", "✓"),
-        new("Preflash ignore (timing window)", "–", "✓", "✓"),
-        new("Tunable flash and shutter timing (settle, debounce, delays)", "–", "✓", "✓"),
-        new("Full source code", "–", "–", "✓")
+        new(
+            "Print the parts",
+            "Use the included STL pack and print guidance to produce the turntable components on your FDM printer.",
+            """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>"""),
+        new(
+            "Assemble with affordable electronics",
+            "Follow the BOM and build guide to wire the board, motor driver, LDR sensor, and core hardware with confidence.",
+            """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/></svg>"""),
+        new(
+            "Control spins from your phone",
+            "Connect directly to Roveltia's built-in WiFi and run smooth spins, indexed steps, and photo sequences from the on-device web UI.",
+            """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>"""),
     ];
 
-    private TierModel SelectedTier => Tiers.First(tier => tier.Id == selectedTierId);
+    /* ── Features ─────────────────────────────────────────────────────── */
 
-    private string selectedTierId = "roveltia";
+    private sealed record FeatureBlock(string Title, string Text, string? Stat, string? Technical, string IconSvg);
 
-    private void SelectTier(string id)
+    private static readonly IReadOnlyList<FeatureBlock> FeatureBlocks =
+    [
+        new(
+            "Works fully offline",
+            "Roveltia runs locally over its own WiFi access point. No cloud, no accounts, no app dependency — your workflow is never at the mercy of a server.",
+            "No cloud. No subscription.",
+            null,
+            """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>"""),
+        new(
+            "Smooth, repeatable motion",
+            "Indexed steps and consistent rotation mean every session is identical. Set your frame count once and get the same result every time.",
+            "0.2 – 3.0 RPM · 28BYJ-48 stepper",
+            null,
+            """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>"""),
+        new(
+            "Built for photo workflows",
+            "24, 36, 48, or 72-frame sequences with automatic shutter triggering and return-to-zero. Every run starts from the same position.",
+            "24 / 36 / 48 / 72 frame presets",
+            null,
+            """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>"""),
+        new(
+            "Control from any phone or browser",
+            "Roveltia hosts its own WiFi access point and on-device web UI — nothing to install. An IR remote is also supported for hands-free operation.",
+            "No app. Open a browser and shoot.",
+            null,
+            """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>"""),
+    ];
+
+    /* ── Audiences ────────────────────────────────────────────────────── */
+
+    private sealed record WorkflowCard(string Title, string Text, string IconSvg);
+
+    private static readonly IReadOnlyList<WorkflowCard> WorkflowCards =
+    [
+        new(
+            "Product photographers",
+            "Create smoother spins, more consistent framing, and repeatable 360° capture workflows without relying on cloud platforms.",
+            """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>"""),
+        new(
+            "Ecommerce sellers",
+            "Capture cleaner product visuals for listings, pages, and social content from a compact, controllable setup that fits your bench.",
+            """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>"""),
+        new(
+            "Makers and builders",
+            "Print the parts, assemble the hardware, and own the full stack — from firmware to web UI. Understand it, modify it, and adapt it to your workflow.",
+            """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>"""),
+    ];
+
+    /* ── Tiers ────────────────────────────────────────────────────────── */
+
+    private sealed record TierCardModel(string Id, string Name, string? Badge, string WhoFor, string Detail);
+
+    private static readonly IReadOnlyList<TierCardModel> TierCards =
+    [
+        new(
+            Id: "standard",
+            Name: "Standard",
+            Badge: null,
+            WhoFor: "For makers and sellers who want the core Roveltia build.",
+            Detail: "Everything you need for offline control, smooth spins, indexed steps, photo sequences, shutter triggering, and IR remote support."),
+        new(
+            Id: "creator",
+            Name: "Creator",
+            Badge: "Most popular",
+            WhoFor: "For serious product photography and studio workflows.",
+            Detail: "Adds flash mode with LDR strobe detection, preflash ignore window, and deeper timing controls for more demanding shoots."),
+        new(
+            Id: "developer",
+            Name: "Developer",
+            Badge: null,
+            WhoFor: "For teams and makers who want full control of the stack.",
+            Detail: "Includes full firmware and web UI source code so you can customize behavior, add features, or adapt the system to your own workflow."),
+        new(
+            Id: "commercial",
+            Name: "Commercial",
+            Badge: null,
+            WhoFor: "For studios and businesses that need to modify or manufacture the hardware.",
+            Detail: "Everything in Developer, plus the original STEP files for the chassis — edit the geometry, adapt the design, or integrate it into your own product."),
+    ];
+
+    /* ── What you get ─────────────────────────────────────────────────── */
+
+    private sealed record WygDeliverable(string Label, string Sub, string IconSvg);
+
+    private static readonly IReadOnlyList<WygDeliverable> WygDeliverables =
+    [
+        new("STL Pack",          "Print-ready files for the turntable parts",                            IconLayers),
+        new("Build Guide",       "Assembly instructions from parts to working hardware",                  IconBook),
+        new("BOM",               "The electronics and hardware list you need to source",                  IconList),
+        new("Firmware",          "On-device software that powers motion and workflows",                   IconCpu),
+        new("Web UI",            "Browser-based control from your phone or desktop",                      IconGlobe),
+        new("Developer Access",  "Full firmware and web UI source code (Developer tier)",                 IconCode),
+        new("STEP Files",        "Editable chassis geometry for hardware modification (Commercial tier)",  IconCube),
+    ];
+
+    /* ── Before you back ──────────────────────────────────────────────── */
+
+    private sealed record DecisionRow(string Label, string Value, string IconSvg);
+
+    private static readonly IReadOnlyList<DecisionRow> BeforeYouBackRows =
+    [
+        new("Printer",           "Designed for FDM 3D printing.",                                                                                                       IconPrinter),
+        new("Electronics cost",  "Expect the BOM to land in a maker-friendly range depending on vendors, region, and what parts you already have.",                     IconWallet),
+        new("Build time",        "Assembly is approachable for makers comfortable with basic wiring and hardware setup.",                                                IconClock),
+        new("Skill level",       "Best suited to beginner-to-intermediate makers who can print parts and follow a build guide.",                                         IconSkill),
+        new("Control",           "Use the on-device web UI from your phone or browser. An IR remote is also supported for hands-free control.",                         IconWifi),
+        new("Output",            "Smooth spins, indexed movement, repeatable frame sequences (24 / 36 / 48 / 72 frames), and 360° product photography workflows.",      IconCamera),
+    ];
+
+    /* ── Compare ──────────────────────────────────────────────────────── */
+
+    private sealed record ComparisonRow(string Name, string Base, string Creator, string Developer, string Commercial);
+
+    private static readonly IReadOnlyList<ComparisonRow> ComparisonRows =
+    [
+        new("IR remote",                              "✓",  "✓",  "✓",  "✓"),
+        new("Web UI, WiFi AP, live status",           "✓",  "✓",  "✓",  "✓"),
+        new("Flash mode (strobe detect)",             "–",  "✓",  "✓",  "✓"),
+        new("Preflash ignore window",                 "–",  "✓",  "✓",  "✓"),
+        new("Tunable flash and shutter timing",       "–",  "✓",  "✓",  "✓"),
+        new("Full firmware source code",              "–",  "–",  "✓",  "✓"),
+        new("Web UI source code",                     "–",  "–",  "✓",  "✓"),
+        new("STEP files (editable chassis)",          "–",  "–",  "–",  "✓"),
+    ];
+
+    private static string FormatCell(string v) => v switch
     {
-        selectedTierId = id;
-    }
+        "✓" => "✓",
+        "–" => "–",
+        _   => v
+    };
 
-    private sealed class TierModel
+    private static string CellClass(string v) => v switch
     {
-        public required string Id { get; init; }
-        public required string Name { get; init; }
-        public string? TabHint { get; init; }
-        public required string Tagline { get; init; }
-        public required string Description { get; init; }
-        public required string IdealFor { get; init; }
-        public required List<string> Includes { get; init; }
-    }
+        "✓" => "cmp-table__cell--yes",
+        "–" => "cmp-table__cell--no",
+        _   => ""
+    };
 
-    private sealed record ComparisonRow(string Name, string Base, string Creator, string Developer);
+    /* ── Icons ────────────────────────────────────────────────────────── */
+
+    private const string IconLayers  = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>""";
+    private const string IconBook    = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>""";
+    private const string IconList    = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>""";
+    private const string IconCpu     = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9zM9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/></svg>""";
+    private const string IconGlobe   = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>""";
+    private const string IconCode    = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>""";
+    private const string IconPrinter = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6v-8z"/></svg>""";
+    private const string IconWallet  = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 12V7H5a2 2 0 010-4h14v4"/><path d="M3 5v14a2 2 0 002 2h16v-5"/><path d="M18 12a2 2 0 000 4h4v-4h-4z"/></svg>""";
+    private const string IconClock   = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>""";
+    private const string IconSkill   = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>""";
+    private const string IconWifi    = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 019.94 0M12 20h.01"/></svg>""";
+    private const string IconCamera  = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>""";
+    private const string IconCube    = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>""";
 }
