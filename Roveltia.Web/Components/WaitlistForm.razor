@@ -47,6 +47,8 @@
 
     [Parameter] public string Placeholder { get; set; } = "you@example.com";
 
+    [Parameter] public EventCallback<WaitlistSignupResult> OnSubmitResult { get; set; }
+
     private string FormClass => Variant switch
     {
         "hero" => "waitlist-form waitlist-form--hero",
@@ -72,6 +74,11 @@
         try
         {
             var result = await WaitlistSignup.SubscribeAsync(new WaitlistSubscribeRequest(_model.Email!, _model.Website));
+
+            if (OnSubmitResult.HasDelegate)
+            {
+                await OnSubmitResult.InvokeAsync(result);
+            }
 
             (_statusMessage, _statusIsError) = result switch
             {

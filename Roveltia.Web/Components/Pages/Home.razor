@@ -370,21 +370,25 @@
             <WaitlistForm FormId="footer"
                           Variant="footer"
                           Placeholder="Enter your email"
-                          Hint="" />
-            <ul class="cta-trust" aria-label="Email commitment">
-                <li class="cta-trust__item">
-                    <svg class="cta-trust__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4L6.5 10.5 3 7"/></svg>
-                    No spam
-                </li>
-                <li class="cta-trust__item">
-                    <svg class="cta-trust__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4L6.5 10.5 3 7"/></svg>
-                    Campaign updates only
-                </li>
-                <li class="cta-trust__item">
-                    <svg class="cta-trust__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4L6.5 10.5 3 7"/></svg>
-                    One-click unsubscribe in every email
-                </li>
-            </ul>
+                          Hint=""
+                          OnSubmitResult="HandleFooterWaitlistResult" />
+            @if (!HideFooterWaitlistInfo)
+            {
+                <ul class="cta-trust" aria-label="Email commitment">
+                    <li class="cta-trust__item">
+                        <svg class="cta-trust__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4L6.5 10.5 3 7"/></svg>
+                        No spam
+                    </li>
+                    <li class="cta-trust__item">
+                        <svg class="cta-trust__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4L6.5 10.5 3 7"/></svg>
+                        Campaign updates only
+                    </li>
+                    <li class="cta-trust__item">
+                        <svg class="cta-trust__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4L6.5 10.5 3 7"/></svg>
+                        One-click unsubscribe in every email
+                    </li>
+                </ul>
+            }
         </div>
     </section>
 
@@ -412,6 +416,8 @@
 </div>
 
 @code {
+    private bool HideFooterWaitlistInfo { get; set; }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -422,6 +428,11 @@
     }
 
     private static string? DemoVideoYoutubeId = null;
+
+    private void HandleFooterWaitlistResult(WaitlistSignupResult result)
+    {
+        HideFooterWaitlistInfo = result == WaitlistSignupResult.AlreadySubscribed;
+    }
 
     private static readonly string HomeJsonLd = JsonSerializer.Serialize(
         new Dictionary<string, object?>
