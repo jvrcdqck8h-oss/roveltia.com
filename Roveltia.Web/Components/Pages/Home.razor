@@ -36,7 +36,8 @@
         <a class="lp__logo" href="/" aria-label="Roveltia home">Roveltia</a>
         <nav class="lp__nav-links" aria-label="Primary navigation">
             <a href="#how">How it works</a>
-            <a href="#features">Features</a>
+            <a href="#features">Why Roveltia</a>
+            <a href="#what-you-get">What's included</a>
             <a href="#tiers">Tiers</a>
             <a href="#faq">FAQ</a>
             <a class="lp__nav-cta" href="#waitlist">Join the waitlist</a>
@@ -54,11 +55,12 @@
                     Digital build kit only · No physical unit shipped
                 </p>
                 <h1 id="hero-h" class="hero__title">
-                    Shoot smooth 360° product photos with a fully offline, 3D-printable smart turntable.
+                    Shoot smooth 360° product photos with a 3D-printable smart turntable built for makers.
                 </h1>
                 <p class="hero__lead">
-                    Build it yourself, control it from your phone or a compatible IR remote, and shoot
-                    repeatable product photos without cloud apps or subscriptions.
+                    Build it yourself, connect directly to its built-in WiFi hotspot, and control
+                    continuous spins, indexed steps, frame sequences, and flash-triggered captures
+                    from your phone or a compatible IR remote.
                 </p>
                 <div class="hero__actions">
                     <WaitlistForm FormId="hero"
@@ -132,7 +134,7 @@
             <div class="turntable__plate"></div>
         </div>
         <p class="showcase__caption">
-            3D-printable chassis · Phone-controlled spins · Fully offline · Stepper motor · 0.2-3.0 RPM
+            3D-printable chassis · Built-in WiFi AP + web UI · IR remote control · Flash-aware capture · 0.2-3.0 RPM
         </p>
     </div>
 
@@ -140,9 +142,9 @@
     <section class="sect sect--surface section-reveal" id="features" aria-labelledby="feat-h">
         <div class="sect__head">
             <p class="eyebrow">Why Roveltia</p>
-            <h2 id="feat-h" class="sect__title">Engineered for offline workflows</h2>
-            <p class="sect__sub">The control of a dedicated product-photo tool without forcing you into
-                cloud software or subscriptions.</p>
+            <h2 id="feat-h" class="sect__title">Engineered for product photography</h2>
+            <p class="sect__sub">Purpose-built motion, capture control, and repeatable workflow features
+                for makers, sellers, and small studios.</p>
         </div>
         <div class="feat-grid">
             @foreach (var f in FeatureBlocks)
@@ -162,6 +164,28 @@
                 </article>
             }
         </div>
+    </section>
+
+    <!-- ── What you get ──────────────────────────────────────────────── -->
+    <section class="sect sect--band section-reveal" id="what-you-get" aria-labelledby="wyg-h">
+        <div class="sect__head">
+            <p class="eyebrow">Included</p>
+            <h2 id="wyg-h" class="sect__title">Everything in your digital kit</h2>
+            <p class="sect__sub">Everything you need to print the parts, build the electronics, and run
+                Roveltia from its on-device control software.</p>
+        </div>
+        <ul class="wyg-grid" role="list">
+            @foreach (var item in WygDeliverables)
+            {
+                <li class="wyg-tile">
+                    <div class="wyg-tile__icon" aria-hidden="true">@((MarkupString)item.IconSvg)</div>
+                    <div class="wyg-tile__body">
+                        <span class="wyg-tile__label">@item.Label</span>
+                        <span class="wyg-tile__sub">@item.Sub</span>
+                    </div>
+                </li>
+            }
+        </ul>
     </section>
 
     <!-- ── Tiers ─────────────────────────────────────────────────────── -->
@@ -194,50 +218,6 @@
         </p>
     </section>
 
-    <!-- ── What you get ──────────────────────────────────────────────── -->
-    <section class="sect sect--band section-reveal" id="what-you-get" aria-labelledby="wyg-h">
-        <div class="sect__head">
-            <p class="eyebrow">Included</p>
-            <h2 id="wyg-h" class="sect__title">Everything in your digital kit</h2>
-            <p class="sect__sub">Everything you need to print the parts, build the electronics, and run
-                Roveltia locally from its on-device software.</p>
-        </div>
-        <ul class="wyg-grid" role="list">
-            @foreach (var item in WygDeliverables)
-            {
-                <li class="wyg-tile">
-                    <div class="wyg-tile__icon" aria-hidden="true">@((MarkupString)item.IconSvg)</div>
-                    <div class="wyg-tile__body">
-                        <span class="wyg-tile__label">@item.Label</span>
-                        <span class="wyg-tile__sub">@item.Sub</span>
-                    </div>
-                </li>
-            }
-        </ul>
-    </section>
-
-    <!-- ── Before you back ───────────────────────────────────────────── -->
-    <section class="sect sect--open section-reveal" id="before-you-back" aria-labelledby="byb-h">
-        <div class="sect__head">
-            <p class="eyebrow">Before you back</p>
-            <h2 id="byb-h" class="sect__title">Know what to expect</h2>
-            <p class="sect__sub">Get clear on printer requirements, electronics cost, build time, and
-                skill level so you can decide with confidence.</p>
-        </div>
-        <div class="expect-grid" role="list">
-            @foreach (var row in BeforeYouBackRows)
-            {
-                <div class="expect-card" role="listitem">
-                    <div class="expect-card__icon" aria-hidden="true">@((MarkupString)row.IconSvg)</div>
-                    <div class="expect-card__body">
-                        <span class="expect-card__label">@row.Label</span>
-                        <p class="expect-card__value">@row.Value</p>
-                    </div>
-                </div>
-            }
-        </div>
-    </section>
-
     <!-- ── Compare ───────────────────────────────────────────────────── -->
     <section class="sect section-reveal" id="compare" aria-labelledby="cmp-h">
         <div class="sect__head">
@@ -254,7 +234,7 @@
                     <h3 class="cmp-mobile__h">Standard includes</h3>
                     <ul class="cmp-mobile__list">
                         <li>IR remote support</li>
-                        <li>Built-in WiFi AP, web UI, live status</li>
+                        <li>Built-in WiFi control and live status</li>
                     </ul>
                 </div>
                 <div class="cmp-mobile__block cmp-mobile__block--cyan">
@@ -310,7 +290,6 @@
         </div>
 
         <!-- Desktop: full table -->
-        <p class="cmp-hint" aria-hidden="true">Scroll horizontally to see all columns on small screens</p>
         <div class="cmp-table-wrap glass-card" role="region" aria-label="Feature comparison table" tabindex="0">
             <table class="cmp-table">
                 <caption class="sr-only">Feature comparison: Standard, Creator, Developer, Commercial</caption>
@@ -348,6 +327,28 @@
                     }
                 </tbody>
             </table>
+        </div>
+    </section>
+
+    <!-- ── Before you back ───────────────────────────────────────────── -->
+    <section class="sect sect--open section-reveal" id="before-you-back" aria-labelledby="byb-h">
+        <div class="sect__head">
+            <p class="eyebrow">Before you back</p>
+            <h2 id="byb-h" class="sect__title">Know what to expect</h2>
+            <p class="sect__sub">Get clear on printer requirements, electronics cost, build time, and
+                skill level so you can decide with confidence.</p>
+        </div>
+        <div class="expect-grid" role="list">
+            @foreach (var row in BeforeYouBackRows)
+            {
+                <div class="expect-card" role="listitem">
+                    <div class="expect-card__icon" aria-hidden="true">@((MarkupString)row.IconSvg)</div>
+                    <div class="expect-card__body">
+                        <span class="expect-card__label">@row.Label</span>
+                        <p class="expect-card__value">@row.Value</p>
+                    </div>
+                </div>
+            }
         </div>
     </section>
 
@@ -396,10 +397,12 @@
     <footer class="lp__footer">
         <p class="lp__footer-logo">Roveltia</p>
         <p class="lp__footer-tag">
-            An offline-first, 3D-printed turntable for makers, studios, and product photographers.
+            A 3D-printed turntable for makers, studios, and product photographers.
         </p>
         <nav class="lp__footer-links" aria-label="Footer">
-            <a href="#features">Features</a>
+            <a href="#how">How it works</a>
+            <a href="#features">Why Roveltia</a>
+            <a href="#what-you-get">What's included</a>
             <a href="#tiers">Tiers</a>
             <a href="#faq">FAQ</a>
             <a href="#waitlist">Waitlist</a>
@@ -408,7 +411,7 @@
             A project by <a href="https://printbusters.io" target="_blank" rel="noopener noreferrer">PrintBusters</a>
         </p>
         <p class="lp__footer-fine">
-            © @DateTime.UtcNow.Year Roveltia · Digital build kit only · No cloud · No subscription
+            © @DateTime.UtcNow.Year Roveltia · Digital build kit only · Built for local control
         </p>
     </footer>
 
@@ -462,9 +465,9 @@
             "No. Roveltia runs locally on the device over its built-in WiFi access point with an on-device " +
             "web UI. No cloud service or subscription is required."),
         new("control", "How do I control it during a shoot?",
-            "You connect directly to Roveltia from your phone or browser and control spins, steps, " +
-            "sequences, and workflow actions from the built-in interface. An IR remote is also " +
-            "supported for hands-free operation."),
+            "You connect directly to Roveltia from your phone or browser and control continuous spins, " +
+            "step moves, homing, frame sequences, shutter actions, and flash workflow settings from the " +
+            "built-in interface. An IR remote is also supported for hands-free operation."),
         new("tiers", "What is the difference between Standard, Creator, Developer, and Commercial?",
             "Standard gives you the core build and workflow features. Creator adds advanced " +
             "photography-oriented tools including flash mode, strobe detection, and tunable timing. " +
@@ -491,7 +494,7 @@
             """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/></svg>"""),
         new(
             "Control spins from your phone",
-            "Connect directly to Roveltia's built-in WiFi access point and run smooth spins, indexed steps, and photo sequences from the on-device web UI.",
+            "Connect directly to Roveltia's built-in WiFi access point and run continuous motion, indexed steps, homing, and photo sequences from the on-device web UI.",
             """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>"""),
     ];
 
@@ -502,29 +505,47 @@
     private static readonly IReadOnlyList<FeatureBlock> FeatureBlocks =
     [
         new(
-            "Works fully offline",
-            "Roveltia runs locally over its built-in WiFi access point and on-device web UI. No cloud, no accounts, no app dependency - your workflow is never at the mercy of a server.",
-            "No cloud. No subscription.",
+            "Self-hosted control",
+            "Roveltia runs from its own built-in WiFi access point, captive portal, and on-device web UI, so setup stays simple and control stays close to the turntable.",
+            "No app required",
             null,
             """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>"""),
         new(
             "Smooth, repeatable motion",
-            "Indexed steps and consistent rotation mean every session is identical. Set your frame count once and get the same result every time.",
-            "0.2 - 3.0 RPM · Stepper motor",
+            "Dial in 0.2-3.0 RPM continuous motion, custom step angles, and repeatable direction control with a geared stepper drive tuned for product work.",
+            "0.2 - 3.0 RPM · Custom step angle",
             null,
             """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>"""),
         new(
             "Built for photo workflows",
-            "24, 36, 48, or 72-frame sequences with automatic shutter triggering and return-to-zero. Every run starts from the same position.",
-            "24 / 36 / 48 / 72 frame presets",
+            "Run automatic sequences with shutter pulses, home the plate on demand, and return to zero after a cycle for consistent starting position between takes.",
+            "IR presets: 24 / 36 / 48 / 72 frames",
             null,
             """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>"""),
         new(
+            "Flash-aware studio mode",
+            "Arm Roveltia to watch the LDR sensor for strobe bursts, ignore preflashes when needed, and step the platform after each detected flash for hands-free capture cycles.",
+            "Threshold + delta + preflash window",
+            null,
+            """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h4v6a1 1 0 0 0 2 0V4h4v7a5 5 0 0 1-10 0V4z"/><path d="M7 4v3"/><path d="M17 4v3"/></svg>"""),
+        new(
             "Control from any phone or browser",
-            "Roveltia hosts a built-in WiFi access point and on-device web UI - nothing to install. An IR remote is also supported for hands-free operation.",
+            "Roveltia hosts its own browser-based control panel with live status, motion state, LDR readings, sequence progress, and setup controls. There is nothing to install.",
             "No app. Open a browser and shoot.",
             null,
             """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>"""),
+        new(
+            "Hands-free IR remote control",
+            "Use the supported IR remote for start-stop, speed trim, direction changes, step presets, frame presets, flash mode, return-home, and shutter toggling without touching the browser UI.",
+            "IR remote workflow presets",
+            null,
+            """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="7.5" y="3.5" width="9" height="17" rx="2.25"/><circle cx="12" cy="7" r="1"/><path d="M10 11h4"/><path d="M10 14.5h4"/><path d="M12 18h.01"/></svg>"""),
+        new(
+            "Flexible power options",
+            "Run Roveltia from 4 x AA batteries for portable setups or power it over USB-C when you want a wired desk or studio workflow.",
+            "4 x AA batteries or USB-C",
+            null,
+            """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M10 2v2"/><path d="M14 2v2"/><path d="M10 10h4"/><path d="M12 8v4"/><path d="M9.5 16h5"/></svg>"""),
     ];
 
     /* ── Tiers ────────────────────────────────────────────────────────── */
@@ -538,13 +559,13 @@
             Name: "Standard",
             Badge: null,
             WhoFor: "For makers and sellers who want the core Roveltia build.",
-            Detail: "Everything you need for offline control, smooth spins, indexed steps, photo sequences, shutter triggering, and IR remote support."),
+            Detail: "Everything you need for browser-based control, smooth spins, custom step moves, shutter triggering, home return, and IR remote support."),
         new(
             Id: "creator",
             Name: "Creator",
             Badge: "Most popular",
             WhoFor: "For serious product photography and studio workflows.",
-            Detail: "Adds flash mode with LDR strobe detection, preflash ignore window, and deeper timing controls for more demanding shoots."),
+            Detail: "Adds flash mode with LDR strobe detection, preflash ignore handling, settle and debounce tuning, and shutter timing controls for more demanding shoots."),
         new(
             Id: "developer",
             Name: "Developer",
@@ -567,7 +588,7 @@
     [
         new("STL Pack",          "Print-ready files for the turntable parts",                            IconLayers),
         new("Build Guide + BOM", "Assembly instructions plus the electronics and hardware sourcing list", IconBook),
-        new("Firmware + Web UI", "On-device software and browser control for motion, timing, and capture", IconCpu),
+        new("Firmware + Web UI", "On-device software for motion, flash detection, shutter timing, and browser-based control", IconCpu),
         new("Developer Access",  "Full firmware and web UI source code in the Developer tier",            IconCode),
         new("Commercial Access", "Editable STEP chassis geometry in the Commercial tier",                 IconCube),
     ];
@@ -581,9 +602,9 @@
         new("Printer",           "Designed for FDM 3D printing.",                                                                                                       IconPrinter),
         new("Electronics cost",  "Expect the BOM to land in a maker-friendly range depending on vendors, region, and what parts you already have.",                     IconWallet),
         new("Build time",        "Assembly is approachable for makers comfortable with basic wiring and hardware setup.",                                                IconClock),
-        new("Skill level",       "Best suited to beginner-to-intermediate makers who can print parts and follow a build guide.",                                         IconSkill),
-        new("Control",           "Use the built-in WiFi access point and on-device web UI from your phone or browser. An IR remote is also supported for hands-free control.", IconWifi),
-        new("Output",            "Smooth spins, indexed movement, repeatable frame sequences (24 / 36 / 48 / 72 frames), and 360° product photography workflows.",      IconCamera),
+        new("Skill level",       "Best suited to beginner-to-intermediate makers who can print parts, wire sensors and a stepper system, and follow a build guide.",   IconSkill),
+        new("Control",           "Use the built-in WiFi access point and on-device web UI from your phone or browser. The firmware also supports captive portal access, live status, and IR control.", IconWifi),
+        new("Output",            "Continuous rotation, indexed movement, homing, repeatable frame sequences, flash-triggered stepping, and 360° product photography workflows.", IconCamera),
     ];
 
     /* ── Compare ──────────────────────────────────────────────────────── */
@@ -592,11 +613,16 @@
 
     private static readonly IReadOnlyList<ComparisonRow> ComparisonRows =
     [
-        new("IR remote",                              "✓",  "✓",  "✓",  "✓"),
-        new("Built-in WiFi AP, web UI, live status",  "✓",  "✓",  "✓",  "✓"),
+        new("IR remote",                               "✓",  "✓",  "✓",  "✓"),
+        new("Built-in WiFi AP, captive portal, web UI","✓",  "✓",  "✓",  "✓"),
+        new("Live status over browser/WebSocket",      "✓",  "✓",  "✓",  "✓"),
+        new("Continuous rotation + custom step angle", "✓",  "✓",  "✓",  "✓"),
+        new("Home return and set-zero controls",       "✓",  "✓",  "✓",  "✓"),
+        new("Browser-triggered shutter pulse",         "✓",  "✓",  "✓",  "✓"),
         new("Flash mode (strobe detect)",             "-",  "✓",  "✓",  "✓"),
         new("Preflash ignore window",                 "-",  "✓",  "✓",  "✓"),
         new("Tunable flash and shutter timing",       "-",  "✓",  "✓",  "✓"),
+        new("AP password + WiFi TX power controls",   "✓",  "✓",  "✓",  "✓"),
         new("Full firmware source code",              "-",  "-",  "✓",  "✓"),
         new("Web UI source code",                     "-",  "-",  "✓",  "✓"),
         new("STEP files (editable chassis)",          "-",  "-",  "-",  "✓"),
