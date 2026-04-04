@@ -32,6 +32,7 @@ fi
 
 LOCAL_OVERRIDE_FILE="./docker-compose.override.yml"
 LOCAL_BUILD_ENV_FILE="./.env.build"
+EXPORT_DIR="$(mktemp -d /tmp/roveltia-deploy.XXXXXX)"
 SSH_CONTROL_PATH="${HOME}/.ssh/cm-%r@%h:%p"
 SSH_OPTS=(
   -o ConnectTimeout=10
@@ -50,6 +51,12 @@ fi
 
 mkdir -p "${HOME}/.ssh"
 chmod 700 "${HOME}/.ssh" || true
+
+cleanup() {
+  rm -rf "${EXPORT_DIR}"
+}
+
+trap cleanup EXIT
 
 retry() {
   local max=3
@@ -71,6 +78,12 @@ RSYNC_SSH="ssh ${SSH_OPTS[*]}"
 
 echo "Deploying Roveltia safely to ${SSH_TARGET} -> ${DEPLOY_PATH} ..."
 echo "Remote .env will be preserved."
+
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "Working tree has uncommitted changes. Deploy will use committed HEAD only."
+fi
+
+git archive --format=tar HEAD | tar -xf - -C "${EXPORT_DIR}"
 
 retry ssh "${SSH_OPTS[@]}" "${SSH_TARGET}" "mkdir -p ${DEPLOY_PATH}"
 
@@ -102,7 +115,7 @@ retry rsync -avz --delete --progress -e "${RSYNC_SSH}" \
   --exclude '.env.*' \
   --exclude '.env.build' \
   --exclude 'docker-compose.override.yml' \
-  ./ "${SSH_TARGET}:${DEPLOY_PATH}/"
+  "${EXPORT_DIR}/" "${SSH_TARGET}:${DEPLOY_PATH}/"
 
 REMOTE_SCRIPT=$(cat <<EOF
 set -euo pipefail
