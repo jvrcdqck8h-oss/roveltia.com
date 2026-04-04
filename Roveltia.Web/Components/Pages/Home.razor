@@ -8,6 +8,7 @@
 <HeadContent>
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="description" content="@SeoContent.HomeDescription" />
+    <meta name="author" content="@SeoContent.SiteName" />
     <link rel="canonical" href="@SeoContent.HomeCanonical" />
     <link rel="alternate" hreflang="en" href="@SeoContent.HomeCanonical" />
     <link rel="alternate" hreflang="x-default" href="@SeoContent.HomeCanonical" />
@@ -17,6 +18,7 @@
     <meta property="og:description" content="@SeoContent.HomeDescription" />
     <meta property="og:url" content="@SeoContent.HomeCanonical" />
     <meta property="og:image" content="@SeoContent.OgImageUrl" />
+    <meta property="og:image:alt" content="@SeoContent.OgImageAlt" />
     <meta property="og:image:width" content="@SeoContent.OgImageWidth" />
     <meta property="og:image:height" content="@SeoContent.OgImageHeight" />
     <meta property="og:locale" content="@SeoContent.Locale" />
@@ -24,6 +26,7 @@
     <meta name="twitter:title" content="@SeoContent.HomeTitle" />
     <meta name="twitter:description" content="@SeoContent.HomeDescription" />
     <meta name="twitter:image" content="@SeoContent.OgImageUrl" />
+    <meta name="twitter:image:alt" content="@SeoContent.OgImageAlt" />
     <script type="application/ld+json">@((MarkupString)HomeJsonLd)</script>
 </HeadContent>
 
@@ -437,23 +440,6 @@
         HideFooterWaitlistInfo = result == WaitlistSignupResult.AlreadySubscribed;
     }
 
-    private static readonly string HomeJsonLd = JsonSerializer.Serialize(
-        new Dictionary<string, object?>
-        {
-            ["@context"] = "https://schema.org",
-            ["@type"] = "WebSite",
-            ["name"] = SeoContent.SiteName,
-            ["url"] = SeoContent.HomeCanonical,
-            ["description"] = SeoContent.HomeDescription,
-            ["image"] = SeoContent.OgImageUrl,
-            ["publisher"] = new Dictionary<string, object?>
-            {
-                ["@type"] = "Organization",
-                ["name"] = SeoContent.SiteName,
-                ["url"] = SeoContent.SiteUrl
-            }
-        });
-
     /* ── FAQ ──────────────────────────────────────────────────────────── */
 
     private static readonly IReadOnlyList<FaqItem> FaqItems =
@@ -477,6 +463,93 @@
             "Roveltia is designed for FDM printing. The build guide will help you understand the " +
             "expected setup and part requirements before you start."),
     ];
+
+    private static string HomeJsonLd => JsonSerializer.Serialize(
+        new Dictionary<string, object?>
+        {
+            ["@context"] = "https://schema.org",
+            ["@graph"] = new object?[]
+            {
+                new Dictionary<string, object?>
+                {
+                    ["@type"] = "Organization",
+                    ["@id"] = $"{SeoContent.SiteUrl}/#organization",
+                    ["name"] = SeoContent.SiteName,
+                    ["url"] = SeoContent.SiteUrl,
+                    ["description"] = SeoContent.SiteTagline,
+                    ["logo"] = SeoContent.OgImageUrl
+                },
+                new Dictionary<string, object?>
+                {
+                    ["@type"] = "WebSite",
+                    ["@id"] = $"{SeoContent.HomeCanonical}#website",
+                    ["url"] = SeoContent.HomeCanonical,
+                    ["name"] = SeoContent.SiteName,
+                    ["description"] = SeoContent.HomeDescription,
+                    ["publisher"] = new Dictionary<string, object?>
+                    {
+                        ["@id"] = $"{SeoContent.SiteUrl}/#organization"
+                    }
+                },
+                new Dictionary<string, object?>
+                {
+                    ["@type"] = "WebPage",
+                    ["@id"] = $"{SeoContent.HomeCanonical}#webpage",
+                    ["url"] = SeoContent.HomeCanonical,
+                    ["name"] = SeoContent.HomeTitle,
+                    ["description"] = SeoContent.HomeDescription,
+                    ["isPartOf"] = new Dictionary<string, object?>
+                    {
+                        ["@id"] = $"{SeoContent.HomeCanonical}#website"
+                    },
+                    ["primaryImageOfPage"] = new Dictionary<string, object?>
+                    {
+                        ["@type"] = "ImageObject",
+                        ["url"] = SeoContent.OgImageUrl,
+                        ["width"] = SeoContent.OgImageWidth,
+                        ["height"] = SeoContent.OgImageHeight
+                    },
+                    ["about"] = new Dictionary<string, object?>
+                    {
+                        ["@id"] = $"{SeoContent.HomeCanonical}#product"
+                    }
+                },
+                new Dictionary<string, object?>
+                {
+                    ["@type"] = "Product",
+                    ["@id"] = $"{SeoContent.HomeCanonical}#product",
+                    ["name"] = SeoContent.SiteName,
+                    ["description"] = SeoContent.HomeDescription,
+                    ["category"] = "3D-printable smart turntable",
+                    ["image"] = SeoContent.OgImageUrl,
+                    ["brand"] = new Dictionary<string, object?>
+                    {
+                        ["@id"] = $"{SeoContent.SiteUrl}/#organization"
+                    },
+                    ["audience"] = new Dictionary<string, object?>
+                    {
+                        ["@type"] = "Audience",
+                        ["audienceType"] = "makers, product photographers, studios, and online sellers"
+                    }
+                },
+                new Dictionary<string, object?>
+                {
+                    ["@type"] = "FAQPage",
+                    ["@id"] = $"{SeoContent.HomeCanonical}#faq",
+                    ["url"] = $"{SeoContent.HomeCanonical}#faq",
+                    ["mainEntity"] = FaqItems.Select(item => new Dictionary<string, object?>
+                    {
+                        ["@type"] = "Question",
+                        ["name"] = item.Question,
+                        ["acceptedAnswer"] = new Dictionary<string, object?>
+                        {
+                            ["@type"] = "Answer",
+                            ["text"] = item.Answer
+                        }
+                    }).ToArray()
+                }
+            }
+        });
 
     /* ── How it works ─────────────────────────────────────────────────── */
 
