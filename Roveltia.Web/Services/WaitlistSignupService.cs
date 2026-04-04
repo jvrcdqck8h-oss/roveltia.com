@@ -9,15 +9,20 @@ public enum WaitlistSignupResult
 {
     Subscribed,
     AlreadySubscribed,
+    SuspectedBot,
     Unsubscribed,
     NotSubscribed,
     InvalidUnsubscribeLink,
     Failed,
 }
 
+public sealed record WaitlistSubscribeRequest(string Email, string? Website);
+
 public interface IWaitlistSignupService
 {
-    Task<WaitlistSignupResult> SubscribeAsync(string email, CancellationToken cancellationToken = default);
+    Task<WaitlistSignupResult> SubscribeAsync(
+        WaitlistSubscribeRequest request,
+        CancellationToken cancellationToken = default);
 
     Task<WaitlistSignupResult> UnsubscribeAsync(string email, string token, CancellationToken cancellationToken = default);
 }
@@ -27,9 +32,17 @@ public sealed class WaitlistSignupService(
     IWaitlistEmailSender waitlistEmailSender,
     ILogger<WaitlistSignupService> logger) : IWaitlistSignupService
 {
-    public async Task<WaitlistSignupResult> SubscribeAsync(string email, CancellationToken cancellationToken = default)
+    public async Task<WaitlistSignupResult> SubscribeAsync(
+        WaitlistSubscribeRequest request,
+        CancellationToken cancellationToken = default)
     {
-        var normalizedEmail = NormalizeEmail(email);
+        var normalizedEmail = NormalizeEmail(request.Email);
+
+        if (IsLikelyBot(request))
+        {
+            logger.LogInformation("Blocked suspected bot waitlist signup for {Email}.", normalizedEmail);
+            return WaitlistSignupResult.SuspectedBot;
+        }
 
         await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
         var existingSignup = await dbContext.WaitlistSignups
@@ -106,6 +119,9 @@ public sealed class WaitlistSignupService(
     private static string NormalizeEmail(string email) => email.Trim().ToLowerInvariant();
 
     private static string NormalizeToken(string token) => token.Trim();
+
+    private static bool IsLikelyBot(WaitlistSubscribeRequest request) =>
+        !string.IsNullOrWhiteSpace(request.Website);
 
     private static string CreateUnsubscribeToken()
     {

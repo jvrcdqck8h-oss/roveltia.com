@@ -1510,6 +1510,14 @@ h6 {
     border: 0;
 }
 
+.waitlist-form__trap {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
 .waitlist-form__input,
 input.waitlist-form__input {
     flex: 1 1 12rem;

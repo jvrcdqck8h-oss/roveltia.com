@@ -9,6 +9,16 @@
                    type="email"
                    autocomplete="email"
                    disabled="@_submitting" />
+        <div class="waitlist-form__trap" aria-hidden="true">
+            <label class="waitlist-form__label" for="@WebsiteInputId">Leave this field empty</label>
+            <InputText id="@WebsiteInputId"
+                       @bind-Value="_model.Website"
+                       class="waitlist-form__input"
+                       type="text"
+                       autocomplete="off"
+                       tabindex="-1"
+                       disabled="@_submitting" />
+        </div>
         <button type="submit" class="waitlist-form__submit @(Variant == "hero" ? "waitlist-form__submit--hero" : "")" disabled="@_submitting">
             @SubmitLabel
         </button>
@@ -61,12 +71,13 @@
 
         try
         {
-            var result = await WaitlistSignup.SubscribeAsync(_model.Email!);
+            var result = await WaitlistSignup.SubscribeAsync(new WaitlistSubscribeRequest(_model.Email!, _model.Website));
 
             (_statusMessage, _statusIsError) = result switch
             {
                 WaitlistSignupResult.Subscribed => ("Thanks! You're on the waitlist.", false),
                 WaitlistSignupResult.AlreadySubscribed => ("That email is already subscribed.", false),
+                WaitlistSignupResult.SuspectedBot => ("Thanks! You're on the waitlist.", false),
                 _ => ("Something went wrong. Please try again in a moment.", true),
             };
         }
@@ -81,6 +92,10 @@
         [Required(ErrorMessage = "Enter an email address.")]
         [EmailAddress(ErrorMessage = "Enter a valid email address.")]
         public string? Email { get; set; }
+
+        public string? Website { get; set; }
     }
+
+    private string WebsiteInputId => $"{FormId}-website";
 
 }
