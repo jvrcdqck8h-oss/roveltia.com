@@ -26,11 +26,6 @@ public class Program
         builder.Services.Configure<CampaignAdminOptions>(builder.Configuration.GetSection("Admin"));
         builder.Services.AddScoped<IWaitlistCampaignService, WaitlistCampaignService>();
         builder.Services.AddScoped<IWaitlistEmailSender, WaitlistCampaignService>();
-        builder.Services.AddHsts(options =>
-        {
-            options.MaxAge = TimeSpan.FromDays(365);
-            options.IncludeSubDomains = true;
-        });
 
         var app = builder.Build();
         app.ApplyDatabaseMigrationsIfEnabled();
@@ -39,23 +34,10 @@ public class Program
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            app.UseHsts();
         }
 
         app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
         app.UseHttpsRedirection();
-        app.Use(async (context, next) =>
-        {
-            context.Response.Headers.TryAdd("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
-            context.Response.Headers.TryAdd("X-Content-Type-Options", "nosniff");
-            context.Response.Headers.TryAdd("Referrer-Policy", "strict-origin-when-cross-origin");
-            context.Response.Headers.TryAdd(
-                "Permissions-Policy",
-                "accelerometer=(), autoplay=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), microphone=(), midi=(), payment=(), usb=()");
-
-            await next();
-        });
 
         app.UseAntiforgery();
 
