@@ -10,6 +10,15 @@
         <p class="unsubscribe-eyebrow">Email preferences</p>
         <h1 class="unsubscribe-title">Waitlist unsubscribe</h1>
         <p class="unsubscribe-message" role="status">@Message</p>
+        @if (_canConfirm)
+        {
+            <button class="unsubscribe-action"
+                    type="button"
+                    disabled="@_submitting"
+                    @onclick="HandleUnsubscribeAsync">
+                @(_submitting ? "Unsubscribing..." : "Confirm unsubscribe")
+            </button>
+        }
         <p class="unsubscribe-meta">
             @if (_completed)
             {
@@ -26,31 +35,45 @@
     [SupplyParameterFromQuery(Name = "token")]
     private string? Token { get; set; }
 
+    private bool _canConfirm;
+    private bool _submitting;
     private bool _completed;
     private string Message { get; set; } = "Checking your unsubscribe link...";
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
-        if (_completed)
+        if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Token))
+        {
+            Message = "This unsubscribe link is incomplete or invalid.";
+            _canConfirm = false;
+            _completed = true;
+            return;
+        }
+
+        Message = $"Ready to unsubscribe {Email.Trim()} from future Roveltia emails.";
+        _canConfirm = true;
+        _completed = false;
+    }
+
+    private async Task HandleUnsubscribeAsync()
+    {
+        if (_submitting || !_canConfirm || string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Token))
         {
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Token))
-        {
-            Message = "This unsubscribe link is incomplete or invalid.";
-            _completed = true;
-            return;
-        }
+        _submitting = true;
 
         var result = await WaitlistSignup.UnsubscribeAsync(Email, Token);
         Message = result switch
         {
             WaitlistSignupResult.Unsubscribed => "You have been unsubscribed from Roveltia emails.",
-            WaitlistSignupResult.InvalidUnsubscribeLink => "This unsubscribe link is invalid or has already been used.",
+            WaitlistSignupResult.InvalidUnsubscribeLink => "This unsubscribe link is invalid or expired. If you opened it recently, you may already be unsubscribed.",
             _ => "We couldn't process the unsubscribe request right now. Please try again later.",
         };
 
+        _submitting = false;
+        _canConfirm = false;
         _completed = true;
     }
 }

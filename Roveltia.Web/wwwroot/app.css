@@ -1698,6 +1698,28 @@ input.waitlist-form__input:focus {
     line-height: 1.65;
 }
 
+.unsubscribe-action {
+    margin-top: 1.25rem;
+    border: 0;
+    border-radius: 999px;
+    padding: 0.85rem 1.4rem;
+    background: var(--accent);
+    color: var(--bg);
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.unsubscribe-action:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+.unsubscribe-action:disabled {
+    opacity: 0.72;
+    cursor: wait;
+}
+
 .unsubscribe-meta {
     margin: 1.25rem 0 0;
     font-size: var(--fs-sm);
