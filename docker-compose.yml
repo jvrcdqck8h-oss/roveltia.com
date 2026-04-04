@@ -23,3 +23,8 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
     ports:
       - "127.0.0.1:${ROVELTIA_HOST_PORT:-8081}:8080"
+    volumes:
+      - roveltia-data-protection:/var/roveltia/data-protection-keys
+
+volumes:
+  roveltia-data-protection:

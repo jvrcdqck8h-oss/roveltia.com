@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Security.Cryptography;
@@ -13,6 +15,9 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        var dataProtectionKeysPath = builder.Configuration["DataProtection:KeysPath"]
+            ?? "/var/roveltia/data-protection-keys";
+
         if (builder.Environment.IsDevelopment())
         {
             builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: false);
@@ -22,6 +27,20 @@ public class Program
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
         builder.Services.AddRoveltiaDatabase(builder.Configuration);
+        builder.Services.AddDataProtection()
+            .PersistKeysToFileSystem(new DirectoryInfo(dataProtectionKeysPath))
+            .SetApplicationName("Roveltia");
+        builder.Services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders =
+                ForwardedHeaders.XForwardedFor |
+                ForwardedHeaders.XForwardedProto |
+                ForwardedHeaders.XForwardedHost;
+
+            // Reverse proxy runs outside the container, so trust forwarded headers explicitly.
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        });
         builder.Services.Configure<WaitlistEmailOptions>(builder.Configuration.GetSection("Email"));
         builder.Services.Configure<CampaignAdminOptions>(builder.Configuration.GetSection("Admin"));
         builder.Services.AddScoped<IWaitlistCampaignService, WaitlistCampaignService>();
@@ -36,6 +55,7 @@ public class Program
             app.UseExceptionHandler("/Error");
         }
 
+        app.UseForwardedHeaders();
         app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
         app.UseHttpsRedirection();
 
