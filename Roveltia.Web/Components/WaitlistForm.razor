@@ -74,16 +74,16 @@
         try
         {
             var result = await WaitlistSignup.SubscribeAsync(new WaitlistSubscribeRequest(_model.Email!, _model.Website));
+            var publicResult = NormalizePublicResult(result);
 
             if (OnSubmitResult.HasDelegate)
             {
-                await OnSubmitResult.InvokeAsync(result);
+                await OnSubmitResult.InvokeAsync(publicResult);
             }
 
-            (_statusMessage, _statusIsError) = result switch
+            (_statusMessage, _statusIsError) = publicResult switch
             {
                 WaitlistSignupResult.Subscribed => ("Thanks! You're on the waitlist.", false),
-                WaitlistSignupResult.AlreadySubscribed => ("That email is already subscribed.", false),
                 WaitlistSignupResult.SuspectedBot => ("Thanks! You're on the waitlist.", false),
                 _ => ("Something went wrong. Please try again in a moment.", true),
             };
@@ -104,5 +104,10 @@
     }
 
     private string WebsiteInputId => $"{FormId}-website";
+
+    private static WaitlistSignupResult NormalizePublicResult(WaitlistSignupResult result) =>
+        result == WaitlistSignupResult.AlreadySubscribed
+            ? WaitlistSignupResult.Subscribed
+            : result;
 
 }
