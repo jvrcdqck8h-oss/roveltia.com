@@ -9,9 +9,9 @@
     --app-text: #edf2f7;
     --app-text-strong: #f8fafc;
     --app-text-inverse: #08111f;
-    --app-accent: #8fb4ff;
-    --app-accent-soft: rgba(143, 180, 255, 0.22);
-    --app-accent-strong: rgba(143, 180, 255, 0.78);
+    --app-accent: #6ea8ff;
+    --app-accent-soft: rgba(110, 168, 255, 0.24);
+    --app-accent-strong: rgba(110, 168, 255, 0.88);
     --app-shadow-soft: 0 4px 14px rgba(0, 0, 0, 0.35);
     --app-border-muted: #929292;
     --app-danger: #7f1d1d;
@@ -172,11 +172,11 @@ h6 {
     --bg:         #0a0c0f;
     --surface:    #11151a;
     --surface-strong: #151a20;
-    --border:     rgba(143, 180, 255, 0.18);
+    --border:     rgba(110, 168, 255, 0.24);
     --text:       #edf2f7;
     --muted:      #98a4b5;
-    --accent:     #8fb4ff;
-    --accent-soft: rgba(143, 180, 255, 0.1);
+    --accent:     #6ea8ff;
+    --accent-soft: rgba(110, 168, 255, 0.14);
     --text-inverse: #08111f;
     --danger:     #fca5a5;
     --overlay:    rgba(10, 12, 15, 0.88);
@@ -1413,6 +1413,39 @@ h6 {
     font-size: var(--fs-sm);
     color: var(--muted);
     max-width: 48ch;
+}
+
+.lp__footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1rem;
+    margin: 0;
+}
+
+.lp__footer-links a,
+.lp__footer-credit a {
+    color: var(--accent);
+    font-weight: 600;
+    transition: opacity 0.15s;
+}
+
+.lp__footer-links a:hover,
+.lp__footer-credit a:hover {
+    opacity: 0.8;
+}
+
+.lp__footer-links a:focus-visible,
+.lp__footer-credit a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+.lp__footer-credit {
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--muted);
 }
 
 .lp__footer-fine {
