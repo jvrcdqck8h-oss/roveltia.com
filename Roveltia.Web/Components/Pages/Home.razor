@@ -57,8 +57,8 @@
                     Shoot smooth 360° product photos with a fully offline, 3D-printable smart turntable.
                 </h1>
                 <p class="hero__lead">
-                    Build it yourself, control it from your phone, and run repeatable product-photo
-                    workflows without cloud apps, subscriptions, or closed hardware.
+                    Build it yourself, control it from your phone or a compatible IR remote, and shoot
+                    repeatable product photos without cloud apps or subscriptions.
                 </p>
                 <div class="hero__actions">
                     <WaitlistForm FormId="hero"
@@ -136,7 +136,7 @@
             <span class="turntable__chip">ESP32-C6</span>
         </div>
         <p class="showcase__caption">
-            3D-printable chassis · Phone-controlled spins · Fully offline · 28BYJ-48 stepper · 0.2-3.0 RPM
+            3D-printable chassis · Phone-controlled spins · Fully offline · Stepper motor · 0.2-3.0 RPM
         </p>
     </div>
 
@@ -146,7 +146,7 @@
             <p class="eyebrow">Why Roveltia</p>
             <h2 id="feat-h" class="sect__title">Engineered for offline workflows</h2>
             <p class="sect__sub">The control of a dedicated product-photo tool without forcing you into
-                cloud software, subscriptions, or locked hardware.</p>
+                cloud software or subscriptions.</p>
         </div>
         <div class="feat-grid">
             @foreach (var f in FeatureBlocks)
@@ -168,34 +168,13 @@
         </div>
     </section>
 
-    <!-- ── Who it's for ──────────────────────────────────────────────── -->
-    <section class="sect section-reveal" id="audiences" aria-labelledby="who-h">
-        <div class="sect__head">
-            <p class="eyebrow">Who it's for</p>
-            <h2 id="who-h" class="sect__title">Built for people who want control</h2>
-            <p class="sect__sub">Whether you're shooting products for a store, building tools for your
-                studio, or creating hardware workflows, Roveltia is made for hands-on users who want
-                repeatable results.</p>
-        </div>
-        <div class="audience-grid">
-            @foreach (var w in WorkflowCards)
-            {
-                <article class="audience-card">
-                    <div class="audience-card__icon" aria-hidden="true">@((MarkupString)w.IconSvg)</div>
-                    <h3 class="audience-card__title">@w.Title</h3>
-                    <p class="audience-card__text">@w.Text</p>
-                </article>
-            }
-        </div>
-    </section>
-
     <!-- ── Tiers ─────────────────────────────────────────────────────── -->
     <section class="sect sect--tiers section-reveal" id="tiers" aria-labelledby="tiers-h">
         <div class="sect__head">
-            <p class="eyebrow">Choose your tier</p>
-            <h2 id="tiers-h" class="sect__title">Standard, Creator, or Developer</h2>
-            <p class="sect__sub">All three tiers use the same printed hardware. The difference is how far
-                you want to go into photography tooling and customization.</p>
+            <p class="eyebrow">Tiers</p>
+            <h2 id="tiers-h" class="sect__title">Choose your tier</h2>
+            <p class="sect__sub">All tiers use the same core hardware. The difference is how much
+                photography control and customization you need.</p>
         </div>
         <div class="tier-grid" role="list">
             @foreach (var tier in TierCards)
@@ -215,7 +194,7 @@
         </div>
         <p class="tier-note">
             Need the full feature breakdown?
-            <a href="#compare">Compare every capability in the matrix below.</a>
+            <a href="#compare">Compare every capability in the full feature breakdown below.</a>
         </p>
     </section>
 
@@ -224,8 +203,8 @@
         <div class="sect__head">
             <p class="eyebrow">Included</p>
             <h2 id="wyg-h" class="sect__title">Everything in your digital kit</h2>
-            <p class="sect__sub">Download the files, print the parts, assemble the electronics, and run
-                the workflow from Roveltia's on-device software.</p>
+            <p class="sect__sub">Everything you need to print the parts, build the electronics, and run
+                Roveltia locally from its on-device software.</p>
         </div>
         <ul class="wyg-grid" role="list">
             @foreach (var item in WygDeliverables)
@@ -266,8 +245,8 @@
     <!-- ── Compare ───────────────────────────────────────────────────── -->
     <section class="sect section-reveal" id="compare" aria-labelledby="cmp-h">
         <div class="sect__head">
-            <p class="eyebrow">Compare features</p>
-            <h2 id="cmp-h" class="sect__title">Capability matrix</h2>
+            <p class="eyebrow">Feature breakdown</p>
+            <h2 id="cmp-h" class="sect__title">Full feature breakdown</h2>
             <p class="sect__sub">Compare all four tiers side by side. Each tier includes everything
                 in the ones below it.</p>
         </div>
@@ -279,7 +258,7 @@
                     <h3 class="cmp-mobile__h">Standard includes</h3>
                     <ul class="cmp-mobile__list">
                         <li>IR remote support</li>
-                        <li>Web UI, WiFi access point, live status</li>
+                        <li>Built-in WiFi AP, web UI, live status</li>
                     </ul>
                 </div>
                 <div class="cmp-mobile__block cmp-mobile__block--cyan">
@@ -390,7 +369,7 @@
         <div class="cta-card">
             <p class="eyebrow eyebrow--on-glow">Waitlist</p>
             <h2 id="cta-h" class="cta-card__title">Be first to know when Roveltia launches.</h2>
-            <p class="cta-card__sub">Early-backer rewards, campaign day access, and prototype progress
+            <p class="cta-card__sub">Early access, campaign day updates, and prototype progress
                 - straight to your inbox when it matters.</p>
             <WaitlistForm FormId="footer"
                           Variant="footer"
@@ -464,16 +443,17 @@
             "No. Roveltia is a digital build kit, not a pre-assembled product. You download the files " +
             "and firmware, print the parts yourself, and source the electronics from the published BOM."),
         new("cloud", "Does it require cloud services or a subscription?",
-            "No. Roveltia runs locally on the device over its own WiFi access point with an on-device " +
+            "No. Roveltia runs locally on the device over its built-in WiFi access point with an on-device " +
             "web UI. No cloud service or subscription is required."),
         new("control", "How do I control it during a shoot?",
             "You connect directly to Roveltia from your phone or browser and control spins, steps, " +
             "sequences, and workflow actions from the built-in interface. An IR remote is also " +
             "supported for hands-free operation."),
-        new("tiers", "What is the difference between Standard, Creator, and Developer?",
+        new("tiers", "What is the difference between Standard, Creator, Developer, and Commercial?",
             "Standard gives you the core build and workflow features. Creator adds advanced " +
             "photography-oriented tools including flash mode, strobe detection, and tunable timing. " +
-            "Developer adds source code access for full customization."),
+            "Developer adds source code access for full customization. Commercial includes editable " +
+            "STEP files for hardware modification and manufacturing use."),
         new("print", "What kind of printer do I need?",
             "Roveltia is designed for FDM printing. The build guide will help you understand the " +
             "expected setup and part requirements before you start."),
@@ -495,7 +475,7 @@
             """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/></svg>"""),
         new(
             "Control spins from your phone",
-            "Connect directly to Roveltia's built-in WiFi and run smooth spins, indexed steps, and photo sequences from the on-device web UI.",
+            "Connect directly to Roveltia's built-in WiFi access point and run smooth spins, indexed steps, and photo sequences from the on-device web UI.",
             """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>"""),
     ];
 
@@ -507,14 +487,14 @@
     [
         new(
             "Works fully offline",
-            "Roveltia runs locally over its own WiFi access point. No cloud, no accounts, no app dependency - your workflow is never at the mercy of a server.",
+            "Roveltia runs locally over its built-in WiFi access point and on-device web UI. No cloud, no accounts, no app dependency - your workflow is never at the mercy of a server.",
             "No cloud. No subscription.",
             null,
             """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>"""),
         new(
             "Smooth, repeatable motion",
             "Indexed steps and consistent rotation mean every session is identical. Set your frame count once and get the same result every time.",
-            "0.2 - 3.0 RPM · 28BYJ-48 stepper",
+            "0.2 - 3.0 RPM · Stepper motor",
             null,
             """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>"""),
         new(
@@ -525,30 +505,10 @@
             """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>"""),
         new(
             "Control from any phone or browser",
-            "Roveltia hosts its own WiFi access point and on-device web UI - nothing to install. An IR remote is also supported for hands-free operation.",
+            "Roveltia hosts a built-in WiFi access point and on-device web UI - nothing to install. An IR remote is also supported for hands-free operation.",
             "No app. Open a browser and shoot.",
             null,
             """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>"""),
-    ];
-
-    /* ── Audiences ────────────────────────────────────────────────────── */
-
-    private sealed record WorkflowCard(string Title, string Text, string IconSvg);
-
-    private static readonly IReadOnlyList<WorkflowCard> WorkflowCards =
-    [
-        new(
-            "Product photographers",
-            "Create smoother spins, more consistent framing, and repeatable 360° capture workflows without relying on cloud platforms.",
-            """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>"""),
-        new(
-            "Ecommerce sellers",
-            "Capture cleaner product visuals for listings, pages, and social content from a compact, controllable setup that fits your bench.",
-            """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/></svg>"""),
-        new(
-            "Makers and builders",
-            "Print the parts, assemble the hardware, and own the full stack - from firmware to web UI. Understand it, modify it, and adapt it to your workflow.",
-            """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>"""),
     ];
 
     /* ── Tiers ────────────────────────────────────────────────────────── */
@@ -590,12 +550,10 @@
     private static readonly IReadOnlyList<WygDeliverable> WygDeliverables =
     [
         new("STL Pack",          "Print-ready files for the turntable parts",                            IconLayers),
-        new("Build Guide",       "Assembly instructions from parts to working hardware",                  IconBook),
-        new("BOM",               "The electronics and hardware list you need to source",                  IconList),
-        new("Firmware",          "On-device software that powers motion and workflows",                   IconCpu),
-        new("Web UI",            "Browser-based control from your phone or desktop",                      IconGlobe),
-        new("Developer Access",  "Full firmware and web UI source code (Developer tier)",                 IconCode),
-        new("STEP Files",        "Editable chassis geometry for hardware modification (Commercial tier)",  IconCube),
+        new("Build Guide + BOM", "Assembly instructions plus the electronics and hardware sourcing list", IconBook),
+        new("Firmware + Web UI", "On-device software and browser control for motion, timing, and capture", IconCpu),
+        new("Developer Access",  "Full firmware and web UI source code in the Developer tier",            IconCode),
+        new("Commercial Access", "Editable STEP chassis geometry in the Commercial tier",                 IconCube),
     ];
 
     /* ── Before you back ──────────────────────────────────────────────── */
@@ -608,7 +566,7 @@
         new("Electronics cost",  "Expect the BOM to land in a maker-friendly range depending on vendors, region, and what parts you already have.",                     IconWallet),
         new("Build time",        "Assembly is approachable for makers comfortable with basic wiring and hardware setup.",                                                IconClock),
         new("Skill level",       "Best suited to beginner-to-intermediate makers who can print parts and follow a build guide.",                                         IconSkill),
-        new("Control",           "Use the on-device web UI from your phone or browser. An IR remote is also supported for hands-free control.",                         IconWifi),
+        new("Control",           "Use the built-in WiFi access point and on-device web UI from your phone or browser. An IR remote is also supported for hands-free control.", IconWifi),
         new("Output",            "Smooth spins, indexed movement, repeatable frame sequences (24 / 36 / 48 / 72 frames), and 360° product photography workflows.",      IconCamera),
     ];
 
@@ -619,7 +577,7 @@
     private static readonly IReadOnlyList<ComparisonRow> ComparisonRows =
     [
         new("IR remote",                              "✓",  "✓",  "✓",  "✓"),
-        new("Web UI, WiFi AP, live status",           "✓",  "✓",  "✓",  "✓"),
+        new("Built-in WiFi AP, web UI, live status",  "✓",  "✓",  "✓",  "✓"),
         new("Flash mode (strobe detect)",             "-",  "✓",  "✓",  "✓"),
         new("Preflash ignore window",                 "-",  "✓",  "✓",  "✓"),
         new("Tunable flash and shutter timing",       "-",  "✓",  "✓",  "✓"),
@@ -654,7 +612,7 @@
     private const string IconWallet  = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 12V7H5a2 2 0 010-4h14v4"/><path d="M3 5v14a2 2 0 002 2h16v-5"/><path d="M18 12a2 2 0 000 4h4v-4h-4z"/></svg>""";
     private const string IconClock   = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>""";
     private const string IconSkill   = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>""";
-    private const string IconWifi    = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 019.94 0M12 20h.01"/></svg>""";
+    private const string IconWifi    = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.82A15.46 15.46 0 0112 5c3.7 0 7.1 1.29 10 3.82"/><path d="M5 12.55A10.94 10.94 0 0112 10c2.6 0 5 .91 7 2.55"/><path d="M8.5 16.09A6.02 6.02 0 0112 15c1.3 0 2.48.39 3.5 1.09"/><circle cx="12" cy="19" r="1.25" fill="currentColor" stroke="none"/></svg>""";
     private const string IconCamera  = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>""";
     private const string IconCube    = """<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>""";
 }

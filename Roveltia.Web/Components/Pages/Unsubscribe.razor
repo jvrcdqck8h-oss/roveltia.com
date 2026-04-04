@@ -1,0 +1,56 @@
+@page "/unsubscribe"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components
+@inject IWaitlistSignupService WaitlistSignup
+
+<PageTitle>Unsubscribe | Roveltia</PageTitle>
+
+<section class="unsubscribe-page">
+    <div class="unsubscribe-card">
+        <p class="unsubscribe-eyebrow">Email preferences</p>
+        <h1 class="unsubscribe-title">Waitlist unsubscribe</h1>
+        <p class="unsubscribe-message" role="status">@Message</p>
+        <p class="unsubscribe-meta">
+            @if (_completed)
+            {
+                <a href="/">Return to Roveltia</a>
+            }
+        </p>
+    </div>
+</section>
+
+@code {
+    [SupplyParameterFromQuery(Name = "email")]
+    private string? Email { get; set; }
+
+    [SupplyParameterFromQuery(Name = "token")]
+    private string? Token { get; set; }
+
+    private bool _completed;
+    private string Message { get; set; } = "Checking your unsubscribe link...";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (_completed)
+        {
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Token))
+        {
+            Message = "This unsubscribe link is incomplete or invalid.";
+            _completed = true;
+            return;
+        }
+
+        var result = await WaitlistSignup.UnsubscribeAsync(Email, Token);
+        Message = result switch
+        {
+            WaitlistSignupResult.Unsubscribed => "You have been unsubscribed from Roveltia emails.",
+            WaitlistSignupResult.InvalidUnsubscribeLink => "This unsubscribe link is invalid or has already been used.",
+            _ => "We couldn't process the unsubscribe request right now. Please try again later.",
+        };
+
+        _completed = true;
+    }
+}

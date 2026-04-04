@@ -1,9 +1,8 @@
 .DS_Store
-.env
 .vscode/*
 !.vscode/launch.json
 !.vscode/tasks.json
 
 **/bin/
 **/obj/
-publish/
+Roveltia.Web/appsettings.Local.json

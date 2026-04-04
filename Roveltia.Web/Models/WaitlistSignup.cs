@@ -1,11 +1,12 @@
 namespace Roveltia.Web.Models;
 
-public class WaitlistSignup
+public sealed class WaitlistSignup
 {
     public Guid Id { get; set; }
 
-    /// <summary>Normalized (trimmed, lower-case) email for uniqueness.</summary>
-    public string Email { get; set; } = "";
+    public string Email { get; set; } = string.Empty;
+
+    public string UnsubscribeToken { get; set; } = string.Empty;
 
     public DateTimeOffset CreatedAtUtc { get; set; }
 }

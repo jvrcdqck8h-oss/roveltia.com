@@ -3,21 +3,36 @@ using Roveltia.Web.Models;
 
 namespace Roveltia.Web.Data;
 
-public class RoveltiaDbContext : DbContext
+public sealed class RoveltiaDbContext(DbContextOptions<RoveltiaDbContext> options) : DbContext(options)
 {
-    public RoveltiaDbContext(DbContextOptions<RoveltiaDbContext> options)
-        : base(options)
-    {
-    }
-
     public DbSet<WaitlistSignup> WaitlistSignups => Set<WaitlistSignup>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        var signup = modelBuilder.Entity<WaitlistSignup>();
-        signup.HasKey(e => e.Id);
-        signup.Property(e => e.Email).HasMaxLength(320).IsRequired();
-        signup.HasIndex(e => e.Email).IsUnique();
-        signup.Property(e => e.CreatedAtUtc).IsRequired();
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<WaitlistSignup>(entity =>
+        {
+            entity.ToTable("WaitlistSignups");
+
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.Email)
+                .IsRequired()
+                .HasMaxLength(320);
+
+            entity.Property(x => x.UnsubscribeToken)
+                .IsRequired()
+                .HasMaxLength(64);
+
+            entity.Property(x => x.CreatedAtUtc)
+                .IsRequired();
+
+            entity.HasIndex(x => x.Email)
+                .IsUnique();
+
+            entity.HasIndex(x => x.UnsubscribeToken)
+                .IsUnique();
+        });
     }
 }

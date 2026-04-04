@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
+using System.Security.Cryptography;
 using Roveltia.Web.Data;
 using Roveltia.Web.Models;
 
@@ -7,50 +7,110 @@ namespace Roveltia.Web.Services;
 
 public enum WaitlistSignupResult
 {
-    Added,
-    AlreadyRegistered,
+    Subscribed,
+    AlreadySubscribed,
+    Unsubscribed,
+    NotSubscribed,
+    InvalidUnsubscribeLink,
     Failed,
 }
 
 public interface IWaitlistSignupService
 {
-    Task<WaitlistSignupResult> TryAddAsync(string email, CancellationToken cancellationToken = default);
+    Task<WaitlistSignupResult> SubscribeAsync(string email, CancellationToken cancellationToken = default);
+
+    Task<WaitlistSignupResult> UnsubscribeAsync(string email, string token, CancellationToken cancellationToken = default);
 }
 
-public sealed class WaitlistSignupService : IWaitlistSignupService
+public sealed class WaitlistSignupService(
+    IDbContextFactory<RoveltiaDbContext> dbContextFactory,
+    IWaitlistEmailSender waitlistEmailSender,
+    ILogger<WaitlistSignupService> logger) : IWaitlistSignupService
 {
-    private readonly RoveltiaDbContext _db;
-    private readonly ILogger<WaitlistSignupService> _logger;
-
-    public WaitlistSignupService(RoveltiaDbContext db, ILogger<WaitlistSignupService> logger)
+    public async Task<WaitlistSignupResult> SubscribeAsync(string email, CancellationToken cancellationToken = default)
     {
-        _db = db;
-        _logger = logger;
-    }
+        var normalizedEmail = NormalizeEmail(email);
 
-    public async Task<WaitlistSignupResult> TryAddAsync(string email, CancellationToken cancellationToken = default)
-    {
-        var normalized = email.Trim().ToLowerInvariant();
-        _db.WaitlistSignups.Add(new WaitlistSignup
+        await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var existingSignup = await dbContext.WaitlistSignups
+            .SingleOrDefaultAsync(x => x.Email == normalizedEmail, cancellationToken);
+
+        if (existingSignup is not null)
+        {
+            return WaitlistSignupResult.AlreadySubscribed;
+        }
+
+        var signup = new WaitlistSignup
         {
             Id = Guid.NewGuid(),
-            Email = normalized,
+            Email = normalizedEmail,
+            UnsubscribeToken = CreateUnsubscribeToken(),
             CreatedAtUtc = DateTimeOffset.UtcNow,
-        });
+        };
+
+        dbContext.WaitlistSignups.Add(signup);
 
         try
         {
-            await _db.SaveChangesAsync(cancellationToken);
-            return WaitlistSignupResult.Added;
+            await dbContext.SaveChangesAsync(cancellationToken);
+            await waitlistEmailSender.SendWelcomeEmailAsync(signup, cancellationToken);
+            return WaitlistSignupResult.Subscribed;
         }
-        catch (DbUpdateException ex) when (ex.InnerException is PostgresException pg && pg.SqlState == PostgresErrorCodes.UniqueViolation)
+        catch (DbUpdateException ex)
         {
-            return WaitlistSignupResult.AlreadyRegistered;
+            logger.LogWarning(ex, "Waitlist subscribe hit a duplicate insert for {Email}.", normalizedEmail);
+            return WaitlistSignupResult.AlreadySubscribed;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Waitlist signup failed.");
+            logger.LogError(ex, "Waitlist subscribe failed for {Email}.", normalizedEmail);
             return WaitlistSignupResult.Failed;
         }
+    }
+
+    public async Task<WaitlistSignupResult> UnsubscribeAsync(string email, string token, CancellationToken cancellationToken = default)
+    {
+        var normalizedEmail = NormalizeEmail(email);
+        var normalizedToken = NormalizeToken(token);
+
+        if (string.IsNullOrWhiteSpace(normalizedEmail) || string.IsNullOrWhiteSpace(normalizedToken))
+        {
+            return WaitlistSignupResult.InvalidUnsubscribeLink;
+        }
+
+        await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+        var existingSignup = await dbContext.WaitlistSignups
+            .SingleOrDefaultAsync(
+                x => x.Email == normalizedEmail && x.UnsubscribeToken == normalizedToken,
+                cancellationToken);
+
+        if (existingSignup is null)
+        {
+            return WaitlistSignupResult.InvalidUnsubscribeLink;
+        }
+
+        dbContext.WaitlistSignups.Remove(existingSignup);
+
+        try
+        {
+            await dbContext.SaveChangesAsync(cancellationToken);
+            return WaitlistSignupResult.Unsubscribed;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Waitlist unsubscribe failed for {Email}.", normalizedEmail);
+            return WaitlistSignupResult.Failed;
+        }
+    }
+
+    private static string NormalizeEmail(string email) => email.Trim().ToLowerInvariant();
+
+    private static string NormalizeToken(string token) => token.Trim();
+
+    private static string CreateUnsubscribeToken()
+    {
+        Span<byte> bytes = stackalloc byte[32];
+        RandomNumberGenerator.Fill(bytes);
+        return Convert.ToHexString(bytes).ToLowerInvariant();
     }
 }

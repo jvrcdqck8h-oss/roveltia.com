@@ -8,25 +8,21 @@
                    placeholder="@Placeholder"
                    type="email"
                    autocomplete="email"
-                   disabled="@(_submitted || _submitting)" />
-        <button type="submit" class="waitlist-form__submit @(Variant == "hero" ? "waitlist-form__submit--hero" : "")" disabled="@(_submitted || _submitting)">
-            Join the waitlist
+                   disabled="@_submitting" />
+        <button type="submit" class="waitlist-form__submit @(Variant == "hero" ? "waitlist-form__submit--hero" : "")" disabled="@_submitting">
+            @SubmitLabel
         </button>
     </div>
     <ValidationMessage For="() => _model.Email" class="waitlist-form__error" />
-    @if (!string.IsNullOrEmpty(_submitError))
+    @if (!string.IsNullOrEmpty(_statusMessage))
     {
-        <p class="waitlist-form__error" role="alert">@_submitError</p>
+        <p class="@StatusClass" role="status">@_statusMessage</p>
     }
-    @if (!_submitted && !string.IsNullOrEmpty(Hint))
+    @if (!_submitting && string.IsNullOrEmpty(_statusMessage) && !string.IsNullOrEmpty(Hint))
     {
         <p class="waitlist-form__hint @(Variant == "footer" ? "waitlist-form__hint--footer" : "")">@Hint</p>
     }
 </EditForm>
-@if (_submitted)
-{
-    <p class="waitlist-form__thanks" role="status">Thanks! We will notify you when the campaign goes live.</p>
-}
 
 @inject IWaitlistSignupService WaitlistSignup
 
@@ -49,23 +45,30 @@
     };
 
     private readonly EmailModel _model = new();
-    private bool _submitted;
     private bool _submitting;
-    private string? _submitError;
+    private string? _statusMessage;
+    private bool _statusIsError;
 
     private string InputId => $"{FormId}-email";
+    private string SubmitLabel => _submitting ? "Subscribing..." : "Join the waitlist";
+    private string StatusClass => _statusIsError ? "waitlist-form__error" : "waitlist-form__thanks";
 
     private async Task HandleSubmitAsync()
     {
-        _submitError = null;
+        _statusMessage = null;
+        _statusIsError = false;
         _submitting = true;
+
         try
         {
-            var result = await WaitlistSignup.TryAddAsync(_model.Email!);
-            if (result is WaitlistSignupResult.Added or WaitlistSignupResult.AlreadyRegistered)
-                _submitted = true;
-            else
-                _submitError = "Something went wrong. Please try again in a moment.";
+            var result = await WaitlistSignup.SubscribeAsync(_model.Email!);
+
+            (_statusMessage, _statusIsError) = result switch
+            {
+                WaitlistSignupResult.Subscribed => ("Thanks! You're on the waitlist.", false),
+                WaitlistSignupResult.AlreadySubscribed => ("That email is already subscribed.", false),
+                _ => ("Something went wrong. Please try again in a moment.", true),
+            };
         }
         finally
         {
@@ -79,4 +82,5 @@
         [EmailAddress(ErrorMessage = "Enter a valid email address.")]
         public string? Email { get; set; }
     }
+
 }
