@@ -5,10 +5,10 @@ public static class SeoContent
 {
     public const string SiteUrl = "https://roveltia.com";
     public const string SiteName = "Roveltia";
-    public const string SiteTagline = "A 3D-printable turntable built for repeatable product photography";
+    public const string SiteTagline = "Build your own smart turntable for smooth, repeatable 360° product photography";
 
     /// <summary>Primary document title.</summary>
-    public const string HomeTitle = "Roveltia | A 3D-printable turntable for product photographers";
+    public const string HomeTitle = "Roveltia | Build your own smart turntable for smooth, repeatable 360° product photography";
 
     /// <summary>Meta description for search and social previews.</summary>
     public const string HomeDescription =
