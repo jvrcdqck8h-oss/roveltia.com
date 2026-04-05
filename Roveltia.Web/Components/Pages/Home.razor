@@ -58,10 +58,10 @@
                     Digital build kit only · No physical unit shipped
                 </p>
                 <h1 id="hero-h" class="hero__title">
-                    Build your own offline turntable for smooth 360° product photography.
+                    Build your own turntable for smoother, repeatable product photography shoots.
                 </h1>
                 <p class="hero__lead">
-                    Assemble it yourself, connect directly to its built-in Wi-Fi, and control spins, indexed steps, frame sequences, and flash-triggered captures from a browser or with a compatible IR remote.
+                    Built first for product photographers who need repeatable spins, cleaner capture cycles, and more control on set. Assemble it yourself, then run indexed turns, frame sequences, and flash-triggered captures from a browser or a compatible IR remote.
                 </p>
                 <div class="hero__actions">
                     <WaitlistForm FormId="hero"
@@ -145,7 +145,7 @@
             <p class="eyebrow">Why Roveltia</p>
             <h2 id="feat-h" class="sect__title">Engineered for product photography</h2>
             <p class="sect__sub">Purpose-built motion, capture control, and repeatable workflow features
-                for makers, sellers, and small studios.</p>
+                for product photographers, with maker-friendly hardware lower down the stack.</p>
         </div>
         <div class="feat-grid">
             @foreach (var f in FeatureBlocks)
@@ -173,7 +173,7 @@
             <p class="eyebrow">Included</p>
             <h2 id="wyg-h" class="sect__title">Everything in your digital kit</h2>
             <p class="sect__sub">Everything you need to print the parts, build the electronics, and run
-                Roveltia from its on-device control software.</p>
+                Roveltia with its firmware, web UI, and build documentation.</p>
         </div>
         <ul class="wyg-grid" role="list">
             @foreach (var item in WygDeliverables)
@@ -398,7 +398,7 @@
     <footer class="lp__footer">
         <p class="lp__footer-logo">Roveltia</p>
         <p class="lp__footer-tag">
-            A 3D-printed turntable for makers, studios, and product photographers.
+            A 3D-printable turntable built first for product photographers.
         </p>
         <nav class="lp__footer-links" aria-label="Footer">
             <a href="#how">How it works</a>
@@ -412,7 +412,7 @@
             A project by <a href="https://printbusters.io" target="_blank" rel="noopener noreferrer">PrintBusters</a>
         </p>
         <p class="lp__footer-fine">
-            © @DateTime.UtcNow.Year Roveltia · Digital build kit only · Built for local control
+            © @DateTime.UtcNow.Year Roveltia · Digital build kit only · Built for repeatable product shoots
         </p>
     </footer>
 
@@ -527,7 +527,7 @@
                     ["audience"] = new Dictionary<string, object?>
                     {
                         ["@type"] = "Audience",
-                        ["audienceType"] = "makers, product photographers, studios, and online sellers"
+                        ["audienceType"] = "product photographers"
                     }
                 },
                 new Dictionary<string, object?>
@@ -576,9 +576,9 @@
     private static readonly IReadOnlyList<FeatureBlock> FeatureBlocks =
     [
         new(
-            "Self-hosted control",
-            "Roveltia runs from its own built-in WiFi access point, captive portal, and on-device web UI, so setup stays simple and control stays close to the turntable.",
-            "No app required",
+            "Fast setup, repeatable control",
+            "Open the control panel in a browser, dial in movement, and keep the turntable workflow close at hand during tabletop shoots.",
+            "Open a browser and start shooting",
             null,
             """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M64 32C28.7 32 0 60.7 0 96l0 64c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-64c0-35.3-28.7-64-64-64L64 32zm280 72a24 24 0 1 1 0 48 24 24 0 1 1 0-48zm48 24a24 24 0 1 1 48 0 24 24 0 1 1 -48 0zM64 288c-35.3 0-64 28.7-64 64l0 64c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-64c0-35.3-28.7-64-64-64L64 288zm280 72a24 24 0 1 1 0 48 24 24 0 1 1 0-48zm56 24a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z"/></svg>"""),
         new(
@@ -600,9 +600,9 @@
             null,
             """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-8.9 35.3S50.7 288 64 288l111.5 0L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 8.9-35.3s-16.6-20.7-30-20.7l-111.5 0L349.4 44.6z"/></svg>"""),
         new(
-            "Control from any phone or browser",
-            "Roveltia hosts its own browser-based control panel with live status, motion state, LDR readings, sequence progress, and setup controls. There is nothing to install.",
-            "No app. Open a browser and shoot.",
+            "Live feedback while you shoot",
+            "Track motion state, LDR readings, sequence progress, and setup controls from the browser-based panel while you work through a capture cycle.",
+            "Live status and sequence progress",
             null,
             """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M16 64C16 28.7 44.7 0 80 0L304 0c35.3 0 64 28.7 64 64l0 384c0 35.3-28.7 64-64 64L80 512c-35.3 0-64-28.7-64-64L16 64zM224 448a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zM304 64L80 64l0 320 224 0 0-320z"/></svg>"""),
         new(
@@ -629,19 +629,19 @@
             Id: "standard",
             Name: "Standard",
             Badge: null,
-            WhoFor: "For makers and sellers who want the core Roveltia build.",
+            WhoFor: "For solo product photographers who want the core Roveltia build.",
             Detail: "Everything you need for browser-based control, smooth spins, custom step moves, shutter triggering, home return, and IR remote support."),
         new(
             Id: "creator",
             Name: "Creator",
             Badge: "Most popular",
-            WhoFor: "For serious product photography and studio workflows.",
+            WhoFor: "For product photographers running repeatable client or catalog shoots.",
             Detail: "Adds flash mode with LDR strobe detection, preflash ignore handling, settle and debounce tuning, and shutter timing controls for more demanding shoots."),
         new(
             Id: "developer",
             Name: "Developer",
             Badge: null,
-            WhoFor: "For teams and makers who want full control of the stack.",
+            WhoFor: "For technical photographers and makers who want full control of the stack.",
             Detail: "Includes full firmware and web UI source code so you can customize behavior, add features, or adapt the system to your own workflow."),
         new(
             Id: "commercial",
@@ -659,7 +659,7 @@
     [
         new("STL Pack",          "Print-ready files for the turntable parts",                            IconLayers),
         new("Build Guide + BOM", "Assembly instructions plus the electronics and hardware sourcing list", IconBook),
-        new("Firmware + Web UI", "On-device software for motion, flash detection, shutter timing, and browser-based control", IconCpu),
+        new("Firmware + Web UI", "Software for motion, flash detection, shutter timing, and browser-based control", IconCpu),
         new("Developer Access",  "Full firmware and web UI source code in the Developer tier",            IconCode),
         new("Commercial Access", "Editable STEP chassis geometry in the Commercial tier",                 IconCube),
     ];
