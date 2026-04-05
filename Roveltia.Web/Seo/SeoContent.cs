@@ -5,14 +5,14 @@ public static class SeoContent
 {
     public const string SiteUrl = "https://roveltia.com";
     public const string SiteName = "Roveltia";
-    public const string SiteTagline = "3D-printable smart turntable for smooth 360 product photography";
+    public const string SiteTagline = "Build your own offline turntable for smooth 360° product photography";
 
     /// <summary>Primary document title.</summary>
-    public const string HomeTitle = "Roveltia | 3D-Printable Smart Turntable for 360 Product Photography";
+    public const string HomeTitle = "Roveltia | Build your own offline turntable for smooth 360° product photography";
 
     /// <summary>Meta description for search and social previews.</summary>
     public const string HomeDescription =
-        "Roveltia is a 3D-printable smart turntable for smooth 360 product photography. Build it yourself, control it from your phone over local WiFi, and capture repeatable product spins without cloud software.";
+        "Roveltia is a digital build kit for a 3D-printable smart turntable—smooth 360° product photography without cloud software. Assemble it yourself, connect to built-in Wi-Fi, and control spins, steps, sequences, and flash captures from a browser or with a compatible IR remote.";
 
     public static string HomeCanonical => $"{SiteUrl}/";
 
