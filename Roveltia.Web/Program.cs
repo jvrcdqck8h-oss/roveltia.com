@@ -15,13 +15,13 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        var dataProtectionKeysPath = builder.Configuration["DataProtection:KeysPath"]
-            ?? "/var/roveltia/data-protection-keys";
 
         if (builder.Environment.IsDevelopment())
         {
             builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: false);
         }
+
+        var dataProtectionKeysPath = ResolveDataProtectionKeysPath(builder);
 
         // Add services to the container.
         builder.Services.AddRazorComponents()
@@ -67,6 +67,41 @@ public class Program
         app.MapPost("/api/admin/waitlist/send", SendWaitlistCampaignAsync);
 
         app.Run();
+    }
+
+    private static string ResolveDataProtectionKeysPath(WebApplicationBuilder builder)
+    {
+        var configuredPath = builder.Configuration["DataProtection:KeysPath"];
+        if (!string.IsNullOrWhiteSpace(configuredPath))
+        {
+            return EnsureWritableDirectory(configuredPath);
+        }
+
+        var defaultPath = builder.Environment.IsDevelopment()
+            ? Path.Combine(builder.Environment.ContentRootPath, ".data-protection-keys")
+            : "/var/roveltia/data-protection-keys";
+
+        try
+        {
+            return EnsureWritableDirectory(defaultPath);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            var fallbackPath = Path.Combine(builder.Environment.ContentRootPath, ".data-protection-keys");
+            Console.WriteLine($"DataProtection keys path '{defaultPath}' is not writable. Falling back to '{fallbackPath}'.");
+            return EnsureWritableDirectory(fallbackPath);
+        }
+    }
+
+    private static string EnsureWritableDirectory(string path)
+    {
+        Directory.CreateDirectory(path);
+
+        var probeFile = Path.Combine(path, ".write-test");
+        File.WriteAllText(probeFile, "ok");
+        File.Delete(probeFile);
+
+        return path;
     }
 
     private static async Task<IResult> SendWaitlistCampaignAsync(
