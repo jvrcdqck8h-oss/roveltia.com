@@ -223,9 +223,25 @@ public sealed class WaitlistCampaignService(
             return "Subject is required.";
         }
 
+        if (request.Subject.Trim().Length > 200)
+        {
+            return "Subject must be 200 characters or fewer.";
+        }
+
         if (string.IsNullOrWhiteSpace(request.Body))
         {
             return "Body is required.";
+        }
+
+        if (request.Body.Trim().Length > 10000)
+        {
+            return "Body must be 10000 characters or fewer.";
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.OnlyEmail) &&
+            request.OnlyEmail.Trim().Length > 320)
+        {
+            return "OnlyEmail must be 320 characters or fewer.";
         }
 
         return null;

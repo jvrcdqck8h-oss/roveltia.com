@@ -50,7 +50,7 @@
             return;
         }
 
-        Message = $"Ready to unsubscribe {Email.Trim()} from future Roveltia emails.";
+        Message = $"Ready to unsubscribe {MaskEmail(Email)} from future Roveltia emails.";
         _canConfirm = true;
         _completed = false;
     }
@@ -75,5 +75,24 @@
         _submitting = false;
         _canConfirm = false;
         _completed = true;
+    }
+
+    private static string MaskEmail(string email)
+    {
+        var trimmed = email.Trim();
+        var atIndex = trimmed.IndexOf('@');
+
+        if (atIndex <= 1 || atIndex == trimmed.Length - 1)
+        {
+            return "this address";
+        }
+
+        var localPart = trimmed[..atIndex];
+        var domain = trimmed[(atIndex + 1)..];
+        var visiblePrefix = localPart[..1];
+        var visibleSuffix = localPart.Length > 2 ? localPart[^1..] : string.Empty;
+        var maskedLength = Math.Max(2, localPart.Length - visiblePrefix.Length - visibleSuffix.Length);
+
+        return $"{visiblePrefix}{new string('*', maskedLength)}{visibleSuffix}@{domain}";
     }
 }

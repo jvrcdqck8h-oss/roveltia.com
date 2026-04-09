@@ -1,11 +1,14 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Security.Cryptography;
+using System.Threading.RateLimiting;
 using System.Text;
 using Roveltia.Web.Data;
 using Roveltia.Web.Components;
+using Roveltia.Web.Security;
 using Roveltia.Web.Services;
 
 namespace Roveltia.Web;
@@ -27,9 +30,12 @@ public class Program
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
         builder.Services.AddRoveltiaDatabase(builder.Configuration);
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddMemoryCache();
         builder.Services.AddDataProtection()
             .PersistKeysToFileSystem(new DirectoryInfo(dataProtectionKeysPath))
             .SetApplicationName("Roveltia");
+        builder.Services.Configure<SecurityOptions>(builder.Configuration.GetSection("Security"));
         builder.Services.Configure<ForwardedHeadersOptions>(options =>
         {
             options.ForwardedHeaders =
@@ -43,6 +49,48 @@ public class Program
         });
         builder.Services.Configure<WaitlistEmailOptions>(builder.Configuration.GetSection("Email"));
         builder.Services.Configure<CampaignAdminOptions>(builder.Configuration.GetSection("Admin"));
+        builder.Services.AddRateLimiter(options =>
+        {
+            var securityOptions = builder.Configuration.GetSection("Security").Get<SecurityOptions>() ?? new SecurityOptions();
+            var adminRequestsPerMinute = Math.Max(1, securityOptions.Admin.RequestsPerMinute);
+
+            options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+            options.OnRejected = static (context, cancellationToken) =>
+            {
+                context.HttpContext.Response.Headers.RetryAfter = "60";
+                return ValueTask.CompletedTask;
+            };
+
+            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+            {
+                var key = GetRequestClientIp(httpContext) ?? "global";
+
+                return RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey: $"global:{key}",
+                    factory: _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = 120,
+                        Window = TimeSpan.FromMinutes(1),
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                        QueueLimit = 0
+                    });
+            });
+
+            options.AddPolicy("adminCampaign", httpContext =>
+            {
+                var key = GetRequestClientIp(httpContext) ?? "admin";
+
+                return RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey: $"admin:{key}",
+                    factory: _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = adminRequestsPerMinute,
+                        Window = TimeSpan.FromMinutes(1),
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                        QueueLimit = 0
+                    });
+            });
+        });
         builder.Services.AddScoped<IWaitlistCampaignService, WaitlistCampaignService>();
         builder.Services.AddScoped<IWaitlistEmailSender, WaitlistCampaignService>();
 
@@ -56,15 +104,44 @@ public class Program
         }
 
         app.UseForwardedHeaders();
+        app.Use(async (context, next) =>
+        {
+            var headers = context.Response.Headers;
+            headers["X-Content-Type-Options"] = "nosniff";
+            headers["X-Frame-Options"] = "DENY";
+            headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+            headers["Permissions-Policy"] = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()";
+            headers["Content-Security-Policy"] =
+                "default-src 'self'; " +
+                "base-uri 'self'; " +
+                "object-src 'none'; " +
+                "frame-ancestors 'none'; " +
+                "form-action 'self'; " +
+                "img-src 'self' data: https:; " +
+                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+                "font-src 'self' https://fonts.gstatic.com data:; " +
+                "script-src 'self' 'unsafe-inline'; " +
+                "connect-src 'self' ws: wss:; " +
+                "frame-src https://www.youtube-nocookie.com; " +
+                "upgrade-insecure-requests";
+
+            if (context.Request.IsHttps)
+            {
+                headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload";
+            }
+
+            await next();
+        });
         app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
         app.UseHttpsRedirection();
-
+        app.UseRateLimiter();
         app.UseAntiforgery();
 
         app.MapStaticAssets();
         app.MapRazorComponents<App>()
             .AddInteractiveServerRenderMode();
-        app.MapPost("/api/admin/waitlist/send", SendWaitlistCampaignAsync);
+        app.MapPost("/api/admin/waitlist/send", SendWaitlistCampaignAsync)
+            .RequireRateLimiting("adminCampaign");
 
         app.Run();
     }
@@ -127,6 +204,19 @@ public class Program
             return Results.Unauthorized();
         }
 
+        if (request.ContentType is not null &&
+            !request.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
+        {
+            return Results.BadRequest(new SendWaitlistCampaignResult(
+                Success: false,
+                MatchedRecipients: 0,
+                SentCount: 0,
+                FailedCount: 0,
+                DryRun: payload.DryRun,
+                Message: "Requests must use application/json.",
+                FailedRecipients: []));
+        }
+
         var result = await campaignService.SendCampaignAsync(payload, cancellationToken);
 
         return result.Success
@@ -142,6 +232,9 @@ public class Program
         return leftBytes.Length == rightBytes.Length &&
                CryptographicOperations.FixedTimeEquals(leftBytes, rightBytes);
     }
+
+    private static string? GetRequestClientIp(HttpContext context) =>
+        context.Connection.RemoteIpAddress?.ToString();
 }
 
 internal static class DatabaseConfiguration
