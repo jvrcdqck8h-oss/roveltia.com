@@ -111,8 +111,7 @@ public class Program
             headers["X-Frame-Options"] = "DENY";
             headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
             headers["Permissions-Policy"] = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()";
-            headers["Content-Security-Policy"] =
-                "default-src 'self'; " +
+            var csp = "default-src 'self'; " +
                 "base-uri 'self'; " +
                 "object-src 'none'; " +
                 "frame-ancestors 'none'; " +
@@ -122,13 +121,15 @@ public class Program
                 "font-src 'self' https://fonts.gstatic.com data:; " +
                 "script-src 'self' 'unsafe-inline'; " +
                 "connect-src 'self' ws: wss:; " +
-                "frame-src https://www.youtube-nocookie.com; " +
-                "upgrade-insecure-requests";
-
+                "frame-src https://www.youtube-nocookie.com;";
+                
             if (context.Request.IsHttps)
             {
+                csp += " upgrade-insecure-requests;";
                 headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload";
             }
+            
+            headers["Content-Security-Policy"] = csp;
 
             await next();
         });
