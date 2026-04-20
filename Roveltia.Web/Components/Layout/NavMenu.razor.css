@@ -52,7 +52,7 @@
     }
 
     .nav-item ::deep .nav-link {
-        color: #d7d7d7;
+        color: #b4bdd0;
         background: none;
         border: none;
         border-radius: var(--r-sm);

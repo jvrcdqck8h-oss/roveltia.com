@@ -4,16 +4,33 @@
    ============================================================ */
 
 :root {
-    --app-bg-deep: #05060a;
-    --app-bg: #0a0c0f;
-    --app-text: #edf2f7;
-    --app-text-strong: #f8fafc;
-    --app-text-inverse: #08111f;
-    --app-accent: #6ea8ff;
+    /* Grey Friends palette — neutral base (darker slate) for page + surfaces */
+    --color-base: #252a34;
+    --color-base-rgb: 37, 42, 52;
+    --palette-blue: #6ea8ff;
+    --palette-slate: var(--color-base);
+    /* Borders / chrome (slightly separated from body copy) */
+    --palette-lavender: #a4abbd;
+    /* Secondary copy: lighter than lavender for AA on #252a34 (~7.6:1) */
+    --text-muted: #b4bdd0;
+    /* Small caps / chips on dark + soft blue tint (~8.3:1 on base) */
+    --accent-bright: #a3c6ff;
+    /* Solid “dim accent” — avoids opacity < 1 on text (~7.2:1 on base) */
+    --accent-muted: #8eb9ff;
+    --palette-slate-deep: var(--color-base);
+    --palette-surface: var(--color-base);
+    --palette-surface-strong: var(--color-base);
+
+    --app-bg-deep: var(--color-base);
+    --app-bg: var(--color-base);
+    --app-text: #f2f3f6;
+    --app-text-strong: #ffffff;
+    --app-text-inverse: var(--color-base);
+    --app-accent: var(--palette-blue);
     --app-accent-soft: rgba(110, 168, 255, 0.24);
     --app-accent-strong: rgba(110, 168, 255, 0.88);
     --app-shadow-soft: 0 4px 14px rgba(0, 0, 0, 0.35);
-    --app-border-muted: #929292;
+    --app-border-muted: rgba(188, 198, 214, 0.5);
     --app-danger: #7f1d1d;
     --fs-2xs: 0.75rem;
     --fs-xs: 0.875rem;
@@ -174,17 +191,17 @@ h6 {
    ============================================================ */
 
 .lp {
-    --bg:         #0a0c0f;
-    --surface:    #11151a;
-    --surface-strong: #151a20;
-    --border:     rgba(110, 168, 255, 0.24);
-    --text:       #edf2f7;
-    --muted:      #98a4b5;
-    --accent:     #6ea8ff;
+    --bg:         var(--palette-slate);
+    --surface:    var(--palette-surface);
+    --surface-strong: var(--palette-surface-strong);
+    --border:     rgba(188, 198, 214, 0.38);
+    --text:       #f2f3f6;
+    --muted:      var(--text-muted);
+    --accent:     var(--palette-blue);
     --accent-soft: rgba(110, 168, 255, 0.14);
-    --text-inverse: #08111f;
+    --text-inverse: var(--color-base);
     --danger:     #fca5a5;
-    --overlay:    rgba(10, 12, 15, 0.88);
+    --overlay:    rgba(var(--color-base-rgb), 0.88);
     --shadow:     0 16px 40px rgba(0, 0, 0, 0.32);
     --inset-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.35);
     --space:      clamp(4rem, 8vw, 6rem);
@@ -224,7 +241,8 @@ h6 {
     right: 0;
     z-index: 80;
     padding: 0.75rem clamp(1rem, 3vw, 2rem) 0;
-    background: linear-gradient(180deg, rgba(5, 6, 10, 0.8) 0%, rgba(5, 6, 10, 0.18) 100%);
+    /* Transparent shell: nav pill carries opaque fill so contrast checks are not blocked by gradients */
+    background: transparent;
     pointer-events: none;
 }
 
@@ -236,12 +254,11 @@ h6 {
     max-width: var(--max-w);
     margin-inline: auto;
     padding: 0.8rem clamp(1rem, 2.2vw, 1.4rem);
-    background: rgba(10, 12, 15, 0.76);
-    border: 1px solid rgba(110, 168, 255, 0.18);
+    /* Opaque bar so link/logo contrast is deterministic (axe + WCAG) */
+    background: rgb(var(--color-base-rgb));
+    border: 1px solid rgba(188, 198, 214, 0.32);
     border-radius: calc(var(--r-pill) + 2px);
     box-shadow: 0 14px 32px rgba(0, 0, 0, 0.24);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
     pointer-events: auto;
 }
 
@@ -364,7 +381,7 @@ h6 {
     border-radius: var(--r-pill);
     border: 1px solid var(--border);
     background: var(--accent-soft);
-    color: var(--accent);
+    color: var(--accent-bright);
     font-size: var(--fs-2xs);
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -517,7 +534,7 @@ h6 {
     border-radius: 50%;
     background: var(--surface-strong);
     border: 1px solid var(--border);
-    box-shadow: inset 0 0 0 0.35rem rgba(5, 6, 10, 0.22);
+    box-shadow: inset 0 0 0 0.35rem rgba(var(--color-base-rgb), 0.4);
     animation: spin 24s linear infinite;
 }
 
@@ -529,7 +546,7 @@ h6 {
     width: 0.9rem;
     height: 0.9rem;
     border-radius: 50%;
-    border: 2px solid rgba(248, 250, 252, 0.72);
+    border: 2px solid rgba(198, 206, 220, 0.55);
     background: transparent;
     transform: translateX(-50%);
 }
@@ -590,9 +607,8 @@ h6 {
     font-size: var(--fs-2xs);
     font-weight: 800;
     letter-spacing: 0.12em;
-    color: var(--accent);
+    color: var(--accent-muted);
     font-variant-numeric: tabular-nums;
-    opacity: 0.7;
 }
 
 .steps__icon {
@@ -839,11 +855,15 @@ h6 {
 .tier-note a {
     color: var(--accent);
     font-weight: 600;
-    transition: opacity 0.15s;
+    text-decoration: none;
+    transition: color 0.15s, filter 0.15s;
 }
 
 .tier-note a:hover {
-    opacity: 0.8;
+    color: var(--accent-bright);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+    filter: brightness(1.05);
 }
 
 .tier-note a:focus-visible {
@@ -1388,9 +1408,8 @@ h6 {
 .cta-trust__icon {
     width: 13px;
     height: 13px;
-    color: var(--accent);
+    color: var(--accent-muted);
     flex-shrink: 0;
-    opacity: 0.8;
 }
 
 .cta-card__title {
@@ -1449,12 +1468,16 @@ h6 {
 .lp__footer-credit a {
     color: var(--accent);
     font-weight: 600;
-    transition: opacity 0.15s;
+    text-decoration: none;
+    transition: color 0.15s, filter 0.15s;
 }
 
 .lp__footer-links a:hover,
 .lp__footer-credit a:hover {
-    opacity: 0.8;
+    color: var(--accent-bright);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+    filter: brightness(1.06);
 }
 
 .lp__footer-links a:focus-visible,
@@ -1572,8 +1595,15 @@ input.waitlist-form__input:focus {
 }
 
 .waitlist-form__input:disabled {
-    opacity: 0.5;
+    opacity: 1;
     cursor: not-allowed;
+    color: #9aa6b8;
+    border-color: rgba(188, 198, 214, 0.22);
+    background: rgba(var(--color-base-rgb), 0.92);
+}
+
+.waitlist-form__input:disabled::placeholder {
+    color: #8d99ae;
 }
 
 .waitlist-form__submit {
@@ -1607,7 +1637,10 @@ input.waitlist-form__input:focus {
 
 .waitlist-form__submit:disabled {
     cursor: default;
-    opacity: 0.7;
+    opacity: 1;
+    background: #4a5568;
+    color: #dce2ec;
+    filter: none;
 }
 
 .waitlist-form--hero {
@@ -1725,8 +1758,10 @@ input.waitlist-form__input:focus {
 }
 
 .unsubscribe-action:disabled {
-    opacity: 0.72;
+    opacity: 1;
     cursor: wait;
+    background: #4a5568;
+    color: #dce2ec;
 }
 
 .unsubscribe-meta {
