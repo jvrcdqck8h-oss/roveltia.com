@@ -240,7 +240,7 @@
                 <div class="cmp-mobile__block cmp-mobile__block--cyan">
                     <h3 class="cmp-mobile__h">Only in Creator+</h3>
                     <ul class="cmp-mobile__list">
-                        <li>Tunable shutter timing</li>
+                        <li>Tunable sequence settle delay</li>
                     </ul>
                 </div>
                 <div class="cmp-mobile__block cmp-mobile__block--violet">
@@ -446,10 +446,10 @@
             "No. Roveltia connects directly to your phone via Bluetooth using the Roveltia mobile app. No cloud service or subscription is required."),
         new("control", "How do I control it during a shoot?",
             "You connect directly to Roveltia from your phone via Bluetooth and control continuous spins, " +
-            "step moves, homing, frame sequences, and shutter actions from the Roveltia app."),
+            "step moves, homing, and frame sequences from the Roveltia app (you trigger the camera yourself)."),
         new("tiers", "What is the difference between Standard, Creator, Developer, and Commercial?",
             "Standard gives you the core build and workflow features. Creator adds advanced " +
-            "photography-oriented tools including tunable timing. " +
+            "photography-oriented tools including tunable sequence settle timing. " +
             "Developer adds source code access for full customization. Commercial includes editable " +
             "STEP files for hardware modification and manufacturing use."),
         new("print", "What kind of printer do I need?",
@@ -556,7 +556,7 @@
             IconPrinter),
         new(
             "Assemble with affordable electronics",
-            "Follow the BOM and build guide to wire the board, motor driver, LDR sensor, and core hardware with confidence.",
+            "Follow the BOM and build guide to wire the board, motor driver, and core hardware with confidence.",
             """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M176 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40c-35.3 0-64 28.7-64 64l-40 0c-13.3 0-24 10.7-24 24s10.7 24 24 24l40 0 0 56-40 0c-13.3 0-24 10.7-24 24s10.7 24 24 24l40 0 0 56-40 0c-13.3 0-24 10.7-24 24s10.7 24 24 24l40 0c0 35.3 28.7 64 64 64l0 40c0 13.3 10.7 24 24 24s24-10.7 24-24l0-40 56 0 0 40c0 13.3 10.7 24 24 24s24-10.7 24-24l0-40 56 0 0 40c0 13.3 10.7 24 24 24s24-10.7 24-24l0-40c35.3 0 64-28.7 64-64l40 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-40 0 0-56 40 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-40 0 0-56 40 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-40 0c0-35.3-28.7-64-64-64l0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40-56 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40-56 0 0-40zM160 128l192 0c17.7 0 32 14.3 32 32l0 192c0 17.7-14.3 32-32 32l-192 0c-17.7 0-32-14.3-32-32l0-192c0-17.7 14.3-32 32-32zm192 32l-192 0 0 192 192 0 0-192z"/></svg>"""),
         new(
             "Control spins from your phone",
@@ -613,13 +613,13 @@
             Name: "Standard",
             Badge: null,
             WhoFor: "For solo product photographers who want the core Roveltia build.",
-            Detail: "Everything you need for app-based control, smooth spins, custom step moves, shutter triggering, and home return."),
+            Detail: "Everything you need for app-based control, smooth spins, custom step moves, frame sequences, and home return."),
         new(
             Id: "creator",
             Name: "Creator",
             Badge: "Most popular",
             WhoFor: "For product photographers running repeatable client or catalog shoots.",
-            Detail: "Adds flash mode with LDR strobe detection, preflash ignore handling, settle and debounce tuning, and shutter timing controls for more demanding shoots."),
+            Detail: "Adds tunable settle delay between sequence stops so you can dial in stability after each move, plus other advanced workflow controls for demanding shoots."),
         new(
             Id: "developer",
             Name: "Developer",
@@ -642,7 +642,7 @@
     [
         new("STL Pack",          "Print-ready files for the turntable parts",                            IconLayers),
         new("Build Guide + BOM", "Assembly instructions plus the electronics and hardware sourcing list", IconBook),
-        new("Firmware + Mobile App", "Software for motion, shutter timing, and app-based control", IconCpu),
+        new("Firmware + Mobile App", "Software for motion, sequence timing, and app-based control", IconCpu),
         new("Developer Access",  "Full firmware source code in the Developer tier",            IconCode),
         new("Commercial Access", "Editable STEP chassis geometry in the Commercial tier",                 IconCube),
     ];
@@ -656,9 +656,9 @@
         new("Printer",           "Designed for FDM 3D printing.",                                                                                                       IconPrinter),
         new("Electronics cost",  "Expect the BOM to land in a maker-friendly range depending on vendors, region, and what parts you already have.",                     IconWallet),
         new("Build time",        "Assembly is approachable for makers comfortable with basic wiring and hardware setup.",                                                IconClock),
-        new("Skill level",       "Best suited to beginner-to-intermediate makers who can print parts, wire sensors and a stepper system, and follow a build guide.",   IconSkill),
+        new("Skill level",       "Best suited to beginner-to-intermediate makers who can print parts, wire a stepper system and basic electronics, and follow a build guide.",   IconSkill),
         new("Control",           "Use the Roveltia mobile app via Bluetooth. The firmware supports live status and seamless connection.", IconBluetooth),
-        new("Output",            "Continuous rotation, indexed movement, homing, repeatable frame sequences, flash-triggered stepping, and 360° product photography workflows.", IconCamera),
+        new("Output",            "Continuous rotation, indexed movement, homing, repeatable frame-by-frame sequences, and 360° product photography workflows.", IconCamera),
     ];
 
     /* ── Compare ──────────────────────────────────────────────────────── */
@@ -671,7 +671,7 @@
         new("Live status over Bluetooth",              "✓",  "✓",  "✓",  "✓"),
         new("Continuous rotation + custom step angle", "✓",  "✓",  "✓",  "✓"),
         new("Home return and set-zero controls",       "✓",  "✓",  "✓",  "✓"),
-        new("Tunable shutter timing",                  "-",  "✓",  "✓",  "✓"),
+        new("Tunable sequence settle delay",             "-",  "✓",  "✓",  "✓"),
         new("Full firmware source code",               "-",  "-",  "✓",  "✓"),
         new("STEP files (editable chassis)",           "-",  "-",  "-",  "✓"),
     ];
