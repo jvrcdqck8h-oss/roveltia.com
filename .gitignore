@@ -7,3 +7,4 @@
 **/obj/
 **/.data-protection-keys/
 Roveltia.Web/appsettings.Local.json
+.env.build
