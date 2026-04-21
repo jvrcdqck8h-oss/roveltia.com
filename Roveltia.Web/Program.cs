@@ -104,6 +104,20 @@ public class Program
         }
 
         app.UseForwardedHeaders();
+
+        // 301 Redirect for lazysusan3dprint.com -> roveltia.com/lazy-susan-3d-print
+        app.Use(async (context, next) =>
+        {
+            if (context.Request.Host.Host.Contains("lazysusan3dprint.com", StringComparison.OrdinalIgnoreCase))
+            {
+                var query = context.Request.QueryString.HasValue ? context.Request.QueryString.Value : "";
+                var redirectUrl = $"https://roveltia.com/lazy-susan-3d-print{query}";
+                context.Response.Redirect(redirectUrl, permanent: true);
+                return;
+            }
+            await next();
+        });
+
         app.Use(async (context, next) =>
         {
             var headers = context.Response.Headers;

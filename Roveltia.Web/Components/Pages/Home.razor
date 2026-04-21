@@ -1,15 +1,17 @@
 @page "/"
+@page "/lazy-susan-3d-print"
 @rendermode InteractiveServer
 @using Roveltia.Web.Models
 @inject IJSRuntime JS
+@inject NavigationManager NavManager
 
-<PageTitle>@SeoContent.HomeTitle</PageTitle>
+<PageTitle>@(IsLazySusan ? "Professional 3D Printed Lazy Susan for 360 Photography | Roveltia" : SeoContent.HomeTitle)</PageTitle>
 
 <HeadContent>
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    <meta name="description" content="@SeoContent.HomeDescription" />
+    <meta name="description" content="@(IsLazySusan ? "Looking for a 3D printed lazy susan project? Roveltia is a digital build kit for building a professional, motorized smart turntable." : SeoContent.HomeDescription)" />
     <meta name="author" content="@SeoContent.SiteName" />
-    <link rel="canonical" href="@SeoContent.HomeCanonical" />
+    <link rel="canonical" href="@(IsLazySusan ? $"{SeoContent.SiteUrl}/lazy-susan-3d-print" : SeoContent.HomeCanonical)" />
     <link rel="alternate" hreflang="en" href="@SeoContent.HomeCanonical" />
     <link rel="alternate" hreflang="x-default" href="@SeoContent.HomeCanonical" />
     <meta property="og:type" content="website" />
@@ -58,10 +60,14 @@
                     Digital build kit only · No physical unit shipped
                 </p>
                 <h1 id="hero-h" class="hero__title">
-                    Build your own smart turntable with a 3D-printed chassis for smooth, repeatable 360° product photography.
+                    @(IsLazySusan 
+                        ? "The professional 3D-printed lazy susan for smooth, repeatable 360° product photography." 
+                        : "Build your own smart turntable with a 3D-printed chassis for smooth, repeatable 360° product photography.")
                 </h1>
                 <p class="hero__lead">
-                    Built first for product photographers who need repeatable spins, cleaner capture cycles, and more control on set. Print the chassis, assemble the hardware yourself, and then run indexed turns, frame sequences, and captures from the Roveltia mobile app via Bluetooth.
+                    @(IsLazySusan 
+                        ? "Built first for makers and photographers who need repeatable spins, cleaner capture cycles, and more control on set. Print the lazy susan chassis, assemble the hardware yourself, and then run indexed turns, frame sequences, and captures from the Roveltia mobile app via Bluetooth." 
+                        : "Built first for product photographers who need repeatable spins, cleaner capture cycles, and more control on set. Print the chassis, assemble the hardware yourself, and then run indexed turns, frame sequences, and captures from the Roveltia mobile app via Bluetooth.")
                 </p>
                 <div class="hero__actions">
                     <WaitlistForm FormId="hero"
@@ -417,6 +423,7 @@
 </div>
 
 @code {
+    private bool IsLazySusan => NavManager.Uri.Contains("/lazy-susan-3d-print");
     private bool HideFooterWaitlistInfo { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
