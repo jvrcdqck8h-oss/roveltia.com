@@ -68,8 +68,8 @@
                 </h1>
                 <p class="hero__lead">
                     @(IsLazySusan 
-                        ? "Built first for makers and photographers who need repeatable spins, cleaner capture cycles, and more control on set. Print the lazy susan chassis, assemble the hardware yourself, and then run indexed turns, frame sequences, and captures from the Roveltia mobile app via Bluetooth." 
-                        : "Built first for product photographers who need repeatable spins, cleaner capture cycles, and more control on set. Print the chassis, assemble the hardware yourself, and then run indexed turns, frame sequences, and captures from the Roveltia mobile app via Bluetooth.")
+                        ? "Built first for makers and photographers who need repeatable spins, cleaner capture cycles, and more control on set. Print the lazy susan chassis, assemble the hardware yourself, and then run indexed turns, multi-frame and single-step sequences, 360° video, shareable animated GIFs, a continuous product-display spin, and an on-device gallery — all from the Roveltia mobile app over Bluetooth." 
+                        : "Built first for product photographers who need repeatable spins, cleaner capture cycles, and more control on set. Print the chassis, assemble the hardware yourself, and then run indexed turns, multi-frame and single-step sequences, 360° video, shareable animated GIFs, a continuous product-display spin, and an on-device gallery — all from the Roveltia mobile app over Bluetooth.")
                 </p>
                 <div class="hero__actions">
                     <WaitlistForm FormId="hero"
@@ -143,7 +143,7 @@
             <div class="turntable__plate"></div>
         </div>
         <p class="showcase__caption">
-            3D printed chassis · Bluetooth mobile app control · 0.2-3.0 RPM
+            3D printed chassis · Bluetooth app · 0.2–3.0 RPM · Still, video, GIF &amp; gallery
         </p>
     </div>
 
@@ -473,8 +473,10 @@
         new("cloud", "Does it require cloud services or a subscription?",
             "No. Roveltia connects directly to your phone via Bluetooth using the Roveltia mobile app. No cloud service or subscription is required."),
         new("control", "How do I control it during a shoot?",
-            "You connect directly to Roveltia from your phone via Bluetooth and control continuous spins, " +
-            "step moves, homing, and frame sequences from the Roveltia app (you trigger the camera yourself)."),
+            "You connect directly to Roveltia from your phone via Bluetooth. The Roveltia app supports continuous " +
+            "spins, homing, automatic multi-frame 360° photo runs (with optional GIF export from your frames), " +
+            "single-step moves, 360° video recording, and a steady product-display mode for live demos. You trigger " +
+            "the shutter; on-device media and settings stay on your phone with no cloud required."),
         new("tiers", "What is the difference between Standard, Creator, Developer, and Commercial?",
             "Standard gives you the core build and workflow features. Creator adds advanced " +
             "photography-oriented tools including tunable sequence settle timing. " +
@@ -588,7 +590,7 @@
             """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M176 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40c-35.3 0-64 28.7-64 64l-40 0c-13.3 0-24 10.7-24 24s10.7 24 24 24l40 0 0 56-40 0c-13.3 0-24 10.7-24 24s10.7 24 24 24l40 0 0 56-40 0c-13.3 0-24 10.7-24 24s10.7 24 24 24l40 0c0 35.3 28.7 64 64 64l0 40c0 13.3 10.7 24 24 24s24-10.7 24-24l0-40 56 0 0 40c0 13.3 10.7 24 24 24s24-10.7 24-24l0-40 56 0 0 40c0 13.3 10.7 24 24 24s24-10.7 24-24l0-40c35.3 0 64-28.7 64-64l40 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-40 0 0-56 40 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-40 0 0-56 40 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-40 0c0-35.3-28.7-64-64-64l0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40-56 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40-56 0 0-40zM160 128l192 0c17.7 0 32 14.3 32 32l0 192c0 17.7-14.3 32-32 32l-192 0c-17.7 0-32-14.3-32-32l0-192c0-17.7 14.3-32 32-32zm192 32l-192 0 0 192 192 0 0-192z"/></svg>"""),
         new(
             "Control spins from your phone",
-            "Connect directly to Roveltia via Bluetooth and run continuous motion, indexed steps, homing, and photo sequences from the Roveltia mobile app.",
+            "Connect via Bluetooth and use the Roveltia app for continuous motion, indexed steps, homing, 360° photo and video capture, single-step moves, GIF export, a product-display spin, and an on-device library.",
             """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M16 64C16 28.7 44.7 0 80 0L304 0c35.3 0 64 28.7 64 64l0 384c0 35.3-28.7 64-64 64L80 512c-35.3 0-64-28.7-64-64L16 64zM144 448c0 8.8 7.2 16 16 16l64 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-64 0c-8.8 0-16 7.2-16 16zM304 64L80 64l0 320 224 0 0-320z"/></svg>"""),
     ];
 
@@ -611,15 +613,15 @@
             null,
             """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M105.1 202.6c7.7-21.8 20.2-42.3 37.8-59.8c62.5-62.5 163.8-62.5 226.3 0L386.3 160 352 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l111.5 0c0 0 0 0 0 0l.4 0c17.7 0 32-14.3 32-32l0-112c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 35.2L414.4 97.6c-87.5-87.5-229.3-87.5-316.8 0C73.2 122 55.6 150.7 44.8 181.4c-5.9 16.7 2.9 34.9 19.5 40.8s34.9-2.9 40.8-19.5zM39 289.3c-5 1.5-9.8 4.2-13.7 8.2c-4 4-6.7 8.8-8.1 14c-.3 1.2-.6 2.5-.8 3.8c-.3 1.7-.4 3.4-.4 5.1L16 432c0 17.7 14.3 32 32 32s32-14.3 32-32l0-35.1 17.6 17.5c0 0 0 0 0 0c87.5 87.4 229.3 87.4 316.7 0c24.4-24.4 42.1-53.1 52.9-83.8c5.9-16.7-2.9-34.9-19.5-40.8s-34.9 2.9-40.8 19.5c-7.7 21.8-20.2 42.3-37.8 59.8c-62.5 62.5-163.8 62.5-226.3 0l-.1-.1L125.6 352l34.4 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L48.4 288c-1.6 0-3.2 .1-4.8 .3s-3.1 .5-4.6 1z"/></svg>"""),
         new(
-            "Built for photo workflows",
-            "Run automatic sequences, home the plate on demand, and return to zero after a cycle for consistent starting position between takes.",
-            "Presets: 24 / 36 / 48 / 72 frames",
+            "Capture modes for every shoot",
+            "Run full 360° photo sequences with quick frame presets or custom shot counts, record 360° in-app video, use single-step moves for hand-led hero angles, or spin continuously for display and demos. Build a looping GIF from your frames, home the plate on demand, and browse captures in the on-device gallery.",
+            "12–72 quick presets · Up to 255 frames in recipes",
             null,
             """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M149.1 64.8L138.7 96 64 96C28.7 96 0 124.7 0 160L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-256c0-35.3-28.7-64-64-64l-74.7 0L362.9 64.8C356.4 45.2 338.1 32 317.4 32L194.6 32c-20.7 0-39 13.2-45.5 32.8zM256 192a96 96 0 1 1 0 192 96 96 0 1 1 0-192z"/></svg>"""),
         new(
-            "Live feedback while you shoot",
-            "Track motion state, sequence progress, and setup controls from the app while you work through a capture cycle.",
-            "Live status and sequence progress",
+            "Live status and on-phone camera control",
+            "Track turntable state and sequence progress on your phone, refine exposure and white balance from the capture screen, and use optional visual feedback when you want extra confidence for consistent, repeatable output.",
+            "Motion status · Exposure and white balance",
             null,
             """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M16 64C16 28.7 44.7 0 80 0L304 0c35.3 0 64 28.7 64 64l0 384c0 35.3-28.7 64-64 64L80 512c-35.3 0-64-28.7-64-64L16 64zM224 448a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zM304 64L80 64l0 320 224 0 0-320z"/></svg>"""),
         new(
@@ -641,7 +643,7 @@
             Name: "Standard",
             Badge: null,
             WhoFor: "For solo product photographers who want the core Roveltia build.",
-            Detail: "Everything you need for app-based control, smooth spins, custom step moves, frame sequences, and home return."),
+            Detail: "Everything you need for app-based control, smooth spins, custom step moves, 360° photo and video workflows, optional GIF output, the on-device gallery, and home return."),
         new(
             Id: "creator",
             Name: "Creator",
@@ -686,7 +688,7 @@
         new("Build time",        "Assembly is approachable for makers comfortable with basic wiring and hardware setup.",                                                IconClock),
         new("Skill level",       "Best suited to beginner-to-intermediate makers who can print parts, wire a stepper system and basic electronics, and follow a build guide.",   IconSkill),
         new("Control",           "Use the Roveltia mobile app via Bluetooth. The firmware supports live status and seamless connection.", IconBluetooth),
-        new("Output",            "Continuous rotation, indexed movement, homing, repeatable frame-by-frame sequences, and 360° product photography workflows.", IconCamera),
+        new("Output",            "Stills, 360° video, looping GIFs from frame sets, in-app gallery, and continuous or stepped motion — all coordinated from the phone with no cloud.", IconCamera),
     ];
 
     /* ── Compare ──────────────────────────────────────────────────────── */

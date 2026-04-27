@@ -12,7 +12,7 @@ public static class SeoContent
 
     /// <summary>Meta description for search and social previews.</summary>
     public const string HomeDescription =
-        "Roveltia is a digital build kit for building your own smart turntable for smooth, repeatable 360 product photography. Print the chassis, assemble the hardware, and run indexed turns, frame sequences, and captures from the Roveltia mobile app via Bluetooth.";
+        "Roveltia is a digital build kit for building your own smart turntable for smooth, repeatable 360 product photography. Print the chassis, assemble the hardware, and control the table from the Roveltia mobile app over Bluetooth: multi-frame sequences, 360° video, animated GIFs, and a local gallery on your phone.";
 
     public static string HomeCanonical => $"{SiteUrl}/";
 
