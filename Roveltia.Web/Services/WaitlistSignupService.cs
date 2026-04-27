@@ -28,6 +28,8 @@ public interface IWaitlistSignupService
         CancellationToken cancellationToken = default);
 
     Task<WaitlistSignupResult> UnsubscribeAsync(string email, string token, CancellationToken cancellationToken = default);
+
+    Task<int> GetSignupCountAsync(CancellationToken cancellationToken = default);
 }
 
 public sealed class WaitlistSignupService(
@@ -91,6 +93,12 @@ public sealed class WaitlistSignupService(
             logger.LogError(ex, "Waitlist subscribe failed for {Email}.", normalizedEmail);
             return WaitlistSignupResult.Failed;
         }
+    }
+
+    public async Task<int> GetSignupCountAsync(CancellationToken cancellationToken = default)
+    {
+        await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+        return await dbContext.WaitlistSignups.CountAsync(cancellationToken);
     }
 
     public async Task<WaitlistSignupResult> UnsubscribeAsync(string email, string token, CancellationToken cancellationToken = default)

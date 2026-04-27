@@ -4,6 +4,8 @@
 @using Roveltia.Web.Models
 @inject IJSRuntime JS
 @inject NavigationManager NavManager
+@inject IWaitlistSignupService WaitlistSignup
+@inject ILogger<Home> Log
 
 <PageTitle>@(IsLazySusan ? "Professional 3D Printed Lazy Susan for 360 Photography | Roveltia" : SeoContent.HomeTitle)</PageTitle>
 
@@ -417,6 +419,10 @@
         <p class="lp__footer-fine">
             © @DateTime.UtcNow.Year Roveltia · Digital build kit only · Built for repeatable product shoots
         </p>
+        @if (_waitlistVersionText is { } vText)
+        {
+            <p class="lp__footer-version" aria-label="Waitlist size">@vText</p>
+        }
     </footer>
 
 </main>
@@ -425,6 +431,21 @@
 @code {
     private bool IsLazySusan => NavManager.Uri.Contains("/lazy-susan-3d-print");
     private bool HideFooterWaitlistInfo { get; set; }
+    private string? _waitlistVersionText;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var count = await WaitlistSignup.GetSignupCountAsync();
+            _waitlistVersionText = $"V{count}";
+        }
+        catch (Exception ex)
+        {
+            Log.LogWarning(ex, "Could not load waitlist signup count for footer version.");
+            _waitlistVersionText = "V—";
+        }
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

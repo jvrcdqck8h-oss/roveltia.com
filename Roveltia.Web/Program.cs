@@ -17,6 +17,10 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        // In Development, .env in the solution root (parent of this project) is a common
+        // local override; ASP.NET does not read it by default. Load it before CreateBuilder
+        // so double-underscored keys (e.g. ConnectionStrings__DefaultConnection) map into configuration.
+        LoadSolutionRootEnvForDevelopment();
         var builder = WebApplication.CreateBuilder(args);
 
         if (builder.Environment.IsDevelopment())
@@ -250,6 +254,64 @@ public class Program
 
     private static string? GetRequestClientIp(HttpContext context) =>
         context.Connection.RemoteIpAddress?.ToString();
+
+    private static void LoadSolutionRootEnvForDevelopment()
+    {
+        if (!string.Equals(
+                Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"),
+                "Development",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        var baseDir = Directory.GetCurrentDirectory();
+        string[] candidates =
+        [
+            Path.GetFullPath(Path.Combine(baseDir, ".env")),
+            Path.GetFullPath(Path.Combine(baseDir, "..", ".env")),
+        ];
+
+        var path = candidates.FirstOrDefault(File.Exists);
+        if (path is null)
+        {
+            return;
+        }
+
+        foreach (var line in File.ReadAllLines(path))
+        {
+            var t = line.Trim();
+            if (t.Length is 0 || t[0] is '#' or ';')
+            {
+                continue;
+            }
+
+            var eq = t.IndexOf('=');
+            if (eq < 1)
+            {
+                continue;
+            }
+
+            var key = t[..eq].Trim();
+            var value = t[(eq + 1)..].Trim();
+            if (value.Length is >= 2)
+            {
+                if (value[0] is '"' && value[^1] is '"')
+                {
+                    value = value[1..^1].Replace("\\\"", "\"", StringComparison.Ordinal);
+                }
+                else if (value[0] is '\'' && value[^1] is '\'')
+                {
+                    value = value[1..^1];
+                }
+            }
+
+            if (key.Length > 0)
+            {
+                Environment.SetEnvironmentVariable(key, value);
+            }
+        }
+    }
 }
 
 internal static class DatabaseConfiguration
